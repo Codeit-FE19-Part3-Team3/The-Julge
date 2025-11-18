@@ -1,8 +1,8 @@
 ---
 name: Feature Request
 about: 새로운 기능을 제안할 때 사용하세요
-title: '[FEATURE] '
-labels: 'enhancement'
+title: '[✨ Feature] '
+labels: '✨ Feat'
 assignees: ''
 ---
 

@@ -1,8 +1,8 @@
 ---
 name: Bug Report
 about: 버그를 제보할 때 사용하세요
-title: '[BUG] '
-labels: 'bug'
+title: '[🐛 Bug] '
+labels: '🐛 Bug'
 assignees: ''
 ---
 
