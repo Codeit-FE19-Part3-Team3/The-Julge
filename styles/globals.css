@@ -50,7 +50,7 @@
     url('/fonts/woff/SpoqaHanSansNeo-Thin.woff') format('woff');
 }
 
-:root {
+@theme {
   /* gray */
   --color-black: #111322;
   --color-gray-50: #7d7986;
