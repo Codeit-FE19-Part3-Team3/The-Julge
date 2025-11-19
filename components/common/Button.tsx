@@ -17,10 +17,6 @@ const buttonVariants = cva(
         medium: 'max-w-[108px] h-[37px] text-sm',
         small: 'max-w-[82px] h-[32px] font-normal text-xs',
       },
-      fullWidth: {
-        true: 'w-full',
-        false: '',
-      },
       disabled: {
         true: '!bg-gray-40 !border-gray-40 !text-white !cursor-not-allowed pointer-events-none',
         false: '',
@@ -29,7 +25,6 @@ const buttonVariants = cva(
     defaultVariants: {
       variant: 'primary',
       size: 'medium',
-      fullWidth: false,
       disabled: false,
     },
   }
@@ -41,8 +36,6 @@ interface ButtonProps
   variant?: 'primary' | 'secondary';
   /** 버튼 크기 */
   size?: 'large' | 'medium' | 'small';
-  /** 전체 너비 사용 여부 */
-  fullWidth?: boolean;
   /** disabled 상태 */
   disabled?: boolean;
 }
