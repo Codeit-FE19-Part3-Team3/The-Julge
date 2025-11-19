@@ -21,18 +21,20 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
 }) => {
   // 사이즈별 스타일
-  const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
+  const sizeClasses = {
     large:
-      'w-[350px] h-[48px] font-bold text-base md:text-base text-center rounded-md',
-    medium: 'w-[108px] h-[37px] font-bold text-sm text-center rounded-md',
-    small: 'w-[82px] h-[32px] font-normal text-xs text-center rounded-md',
+      'w-full max-w-[350px] h-[48px] font-bold text-base text-center rounded-md',
+    medium:
+      'w-full max-w-[108px] h-[37px] font-bold text-sm text-center rounded-md',
+    small:
+      'w-full max-w-[82px] h-[32px] font-normal text-xs text-center rounded-md',
   };
   // 상태별 스타일
   const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
     primary:
-      'bg-red-50 border-[1px] border border-red-50 text-white hover:bg-white hover:text-red-50',
+      'bg-red-50 border border-red-50 text-white hover:bg-white hover:text-red-50 cursor-pointer',
     secondary:
-      'bg-white border-[1px] border border-red-50 text-red-50 hover:bg-red-50 hover:text-white',
+      'bg-white border border-red-50 text-red-50 hover:bg-red-50 hover:text-white cursor-pointer',
   };
 
   // disabled 상태 클래스
@@ -43,7 +45,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       className={`${sizeClasses[size]} ${
         disabled ? disabledClasses : variantClasses[variant]
-      } shrink cursor-pointer transition-colors`}
+      } shrink transition-colors`}
       onClick={onClick}
       disabled={disabled}>
       {label}
