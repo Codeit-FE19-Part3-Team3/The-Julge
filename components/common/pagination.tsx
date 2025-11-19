@@ -38,6 +38,8 @@ interface PaginationProps {
 const Pagination = ({ total, limit, page, setPage }: PaginationProps) => {
   const numPages = Math.ceil(total / limit);
 
+  if (numPages <= 1) return null;
+
   return (
     <nav className="mt-4 flex items-center gap-2">
       <button
