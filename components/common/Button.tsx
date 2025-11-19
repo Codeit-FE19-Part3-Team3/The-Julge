@@ -1,7 +1,9 @@
-import { cva, VariantProps } from 'class-variance-authority';
+import type { ButtonHTMLAttributes } from 'react';
+
+import { cva } from 'class-variance-authority';
 
 const buttonVariants = cva(
-  'shrink transition-colors font-bold text-center rounded-md w-full',
+  'shrink-0 transition-colors font-bold text-center rounded-md w-full',
   {
     variants: {
       variant: {
@@ -15,52 +17,44 @@ const buttonVariants = cva(
         medium: 'max-w-[108px] h-[37px] text-sm',
         small: 'max-w-[82px] h-[32px] font-normal text-xs',
       },
-      disabled: {
-        true: 'cursor-not-allowed pointer-events-none',
-        false: '',
-      },
     },
-    compoundVariants: [
-      {
-        disabled: true,
-        class:
-          '!bg-gray-40 !border-gray-40 !text-white hover:!bg-gray-40 hover:!text-white',
-      },
-    ],
     defaultVariants: {
       variant: 'primary',
       size: 'medium',
-      disabled: false,
     },
   }
 );
 
-interface ButtonProps extends VariantProps<typeof buttonVariants> {
-  /** 버튼에 표시될 텍스트 */
-  label: string;
-  /** 버튼 클릭 시 호출될 함수 */
-  onClick?: () => void;
+interface ButtonProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> {
+  /** 버튼 variant */
+  variant?: 'primary' | 'secondary';
+  /** 버튼 크기 */
+  size?: 'large' | 'medium' | 'small';
   /** disabled 상태 */
   disabled?: boolean;
 }
 
 const Button = ({
-  label,
-  onClick,
-  disabled = false,
+  children,
+  className,
   variant,
   size,
+  disabled = false,
+  ...props
 }: ButtonProps) => {
+  const baseClasses = buttonVariants({ variant, size, className });
+  const disabledClasses = disabled
+    ? '!bg-gray-40 !border-gray-40 !text-white !cursor-not-allowed pointer-events-none hover:!bg-gray-40 hover:!text-white'
+    : '';
+
   return (
     <button
-      className={buttonVariants({
-        variant,
-        size,
-        disabled,
-      })}
-      onClick={onClick}
-      disabled={disabled}>
-      {label}
+      type="button"
+      className={`${baseClasses} ${disabledClasses}`}
+      disabled={disabled}
+      {...props}>
+      {children}
     </button>
   );
 };
