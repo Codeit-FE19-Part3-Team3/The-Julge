@@ -22,7 +22,7 @@ const buttonVariants = cva(
         false: '',
       },
       disabled: {
-        true: '!bg-gray-40 !border-gray-40 !text-white !cursor-not-allowed pointer-events-none hover:!bg-gray-40 hover:!text-white',
+        true: '!bg-gray-40 !border-gray-40 !text-white !cursor-not-allowed pointer-events-none',
         false: '',
       },
     },
