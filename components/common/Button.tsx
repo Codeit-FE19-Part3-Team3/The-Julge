@@ -1,9 +1,12 @@
 import type { ButtonHTMLAttributes } from 'react';
 
-import { cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
+import { cn } from '@/lib/utils';
+
+// cva 정의
 const buttonVariants = cva(
-  'shrink-0 transition-colors font-bold text-center rounded-md  w-full',
+  'shrink-0 transition-colors font-bold text-center rounded-md w-full',
   {
     variants: {
       variant: {
@@ -31,14 +34,8 @@ const buttonVariants = cva(
 );
 
 interface ButtonProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> {
-  /** 버튼 variant */
-  variant?: 'primary' | 'secondary';
-  /** 버튼 크기 */
-  size?: 'large' | 'medium' | 'small';
-  /** disabled 상태 */
-  disabled?: boolean;
-}
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'>,
+    VariantProps<typeof buttonVariants> {}
 
 const Button = ({
   children,
@@ -51,8 +48,8 @@ const Button = ({
   return (
     <button
       type="button"
-      className={buttonVariants({ variant, size, disabled, className })}
-      disabled={disabled}
+      disabled={!!disabled}
+      className={cn(buttonVariants({ variant, size, disabled }), className)}
       {...props}>
       {children}
     </button>
