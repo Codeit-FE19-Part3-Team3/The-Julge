@@ -18,29 +18,24 @@ export default function ConfirmModal({
 }: ConfirmModalProps) {
   return (
     <BaseModal isOpen={isOpen} onClose={onCancel}>
-      <div
-        className="
-          flex flex-col items-center text-center
-          w-[298px] h-[183px]
-          pt-6 pb-5 px-4
-          justify-between
-        "
-      >
-        {/* 아이콘 + 메시지 */}
-        <div className="flex flex-col items-center gap-3">
-          <Image src="/images/check.png" alt="체크" width={24} height={24} />
-          <p className="text-[16px] leading-[22px]">{message}</p>
-        </div>
+      <div className="w-[298px] h-[183px] p-4 flex flex-col items-center justify-center gap-5">
+
+        {/* 아이콘 */}
+        <Image src="/images/check.png" alt="느낌표 아이콘" width={24} height={24} />
+
+        {/* 메시지 */}
+        <p className="text-[16px]">{message}</p>
 
         {/* 버튼 그룹 */}
         <div className="flex gap-3">
+
           <button
             onClick={onCancel}
             className="
               w-[108px] h-[37px]
-              border border-[#E44536] text-[#E44536]
-              rounded-md hover:bg-[#fde9e6]
-              text-[15px]
+              border border-[#EA3C12] text-[#EA3C12]
+              rounded-md text-[15px]
+              hover:bg-[#fde9e6]
             "
           >
             아니요
@@ -50,9 +45,8 @@ export default function ConfirmModal({
             onClick={onConfirm}
             className="
               w-[108px] h-[37px]
-              bg-[#E44536] text-white
-              rounded-md hover:bg-[#d63a2d]
-              text-[15px]
+              bg-[#EA3C12] text-white rounded-md text-[15px]
+              hover:bg-[#d63a2d]
             "
           >
             예

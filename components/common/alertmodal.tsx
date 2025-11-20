@@ -9,31 +9,29 @@ interface AlertModalProps {
   onClose: () => void;
 }
 
-export default function AlertModal({ isOpen, message, onClose }: AlertModalProps) {
+export default function AlertModal({
+  isOpen,
+  message,
+  onClose,
+}: AlertModalProps) {
   return (
     <BaseModal isOpen={isOpen} onClose={onClose}>
-      <div
-        className="
-          flex flex-col items-center text-center
-          w-[298px] h-[183px]
-          pt-6 pb-5 px-4
-          justify-between
-        "
-      >
-        {/* 아이콘 + 메시지 */}
-        <div className="flex flex-col items-center gap-3">
-          <Image src="/images/check.png" alt="경고" width={24} height={24} />
-          <p className="text-[16px] leading-[22px]">{message}</p>
-        </div>
+      <div className="w-[298px] h-[183px] p-4 flex flex-col items-center justify-center gap-5">
 
-        {/* 확인 버튼 */}
+        {/* 아이콘 */}
+        <Image src="/images/check.png" alt="느낌표 아이콘" width={24} height={24} />
+
+        {/* 메시지 */}
+        <p className="text-[16px]">{message}</p>
+
+        {/* 버튼 */}
         <button
           onClick={onClose}
           className="
             w-[80px] h-[37px]
-            rounded-md border border-[#E44536] text-[#E44536]
+            border border-[#EA3C12] text-[#EA3C12]
+            rounded-md text-[15px]
             hover:bg-[#fde9e6] transition
-            text-[15px] font-medium
           "
         >
           확인

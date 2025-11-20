@@ -56,11 +56,28 @@ interface BaseModalProps {
 export default function BaseModal({ isOpen, onClose, children }: BaseModalProps) {
   // 스크롤 방지
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "auto";
+    if (isOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "auto";
+
     return () => {
       document.body.style.overflow = "auto";
     };
   }, [isOpen]);
+
+  // 이에스시키
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -68,10 +85,11 @@ export default function BaseModal({ isOpen, onClose, children }: BaseModalProps)
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
     >
       <div
         className="bg-white rounded-xl shadow-md flex flex-col items-center text-center"
-        style={{ width: 298, height: 183, padding: 16 }}
         onClick={(e) => e.stopPropagation()}
       >
         {children}
