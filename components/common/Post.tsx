@@ -11,6 +11,7 @@ interface StoreInfo {
   wage: number;
   imageUrl: string;
   isActive?: boolean; // 활성/비활성 상태
+  isBadge?: boolean; // 활성/비활성 상태
 }
 const Post = ({
   name,
@@ -20,6 +21,7 @@ const Post = ({
   wage,
   imageUrl,
   isActive = true,
+  isBadge = true,
 }: StoreInfo) => {
   const displayWorkTime = formatWorkTime(startAt, workTime);
 
@@ -65,33 +67,37 @@ const Post = ({
           <h2 className={postClasses.wage({ isActive })}>
             {wage.toLocaleString()}원
           </h2>
-          {/* 뱃지 (sm 이상에만 표시) */}
-          <span className={postClasses.badge({ isActive })}>
-            기존 시급보다 50%
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M9.03333 13.2H4.03333V6.53333H0L6.53333 0L13.0667 6.53333H9.03333V13.2Z"
-                fill="white"
-              />
-            </svg>
-          </span>
+          {isBadge && (
+            <>
+              {/* 뱃지 (sm 이상에만 표시) */}
+              <span className={postClasses.badge({ isActive })}>
+                기존 시급보다 50%
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M9.03333 13.2H4.03333V6.53333H0L6.53333 0L13.0667 6.53333H9.03333V13.2Z"
+                    fill="white"
+                  />
+                </svg>
+              </span>
 
-          {/* 모바일/태블릿용 뱃지 텍스트 */}
-          <span className={postClasses.badgeText({ isActive })}>
-            기존 시급보다 50%
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 14 14"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M9.03333 13.2H4.03333V6.53333H0L6.53333 0L13.0667 6.53333H9.03333V13.2Z" />
-            </svg>
-          </span>
+              {/* 모바일/태블릿용 뱃지 텍스트 */}
+              <span className={postClasses.badgeText({ isActive })}>
+                기존 시급보다 50%
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 14 14"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9.03333 13.2H4.03333V6.53333H0L6.53333 0L13.0667 6.53333H9.03333V13.2Z" />
+                </svg>
+              </span>
+            </>
+          )}
         </div>
       </div>
     </div>
