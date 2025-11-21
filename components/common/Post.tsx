@@ -3,6 +3,8 @@ import MapIcon from '@/components/icons/MapIcon';
 import { formatWorkTime } from '@/lib/utils/formatWorkTime';
 import { postClasses } from '@/lib/utils/postClasses';
 
+import BadgeArrow from '../icons/BadgeArrow';
+
 interface StoreInfo {
   name: string;
   startAt: string;
@@ -11,7 +13,7 @@ interface StoreInfo {
   wage: number;
   imageUrl: string;
   isActive?: boolean; // 활성/비활성 상태
-  isBadge?: boolean; // 활성/비활성 상태
+  percentage?: number;
 }
 const Post = ({
   name,
@@ -21,9 +23,23 @@ const Post = ({
   wage,
   imageUrl,
   isActive = true,
-  isBadge = true,
+  percentage,
 }: StoreInfo) => {
-  const displayWorkTime = formatWorkTime(startAt, workTime);
+  const displayWorkTime = formatWorkTime(startAt, workTime); // 시작 시간과 몇 시간 일하는지로 근무 시간 구하기
+
+  // 데스크탑: 배경색
+  const getBadgeBgClass = (percentage: number) => {
+    if (percentage >= 50) return 'bg-[var(--color-red-40)] text-white';
+    if (percentage >= 30) return 'bg-[var(--color-red-30)] text-white';
+    return 'bg-[var(--color-red-20)] text-white';
+  };
+
+  // 모바일: 배경 없이 텍스트 색만
+  const getBadgeTextColorClass = (percentage: number) => {
+    if (percentage >= 50) return 'text-[var(--color-red-40)]';
+    if (percentage >= 30) return 'text-[var(--color-red-30)]';
+    return 'text-[var(--color-red-20)]';
+  };
 
   return (
     <div className={postClasses.container()}>
@@ -63,38 +79,28 @@ const Post = ({
         </div>
 
         {/* 시급 */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col whitespace-nowrap sm:flex-row sm:items-center sm:justify-between">
           <h3 className={postClasses.wage({ isActive })}>
             {wage.toLocaleString()}원
           </h3>
-          {isBadge && (
+          {percentage && (
             <>
-              {/* 뱃지 (sm 이상에만 표시) */}
-              <span className={postClasses.badge({ isActive })}>
-                기존 시급보다 50%
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M9.03333 13.2H4.03333V6.53333H0L6.53333 0L13.0667 6.53333H9.03333V13.2Z"
-                    fill="white"
-                  />
-                </svg>
+              {/* 데스크탑 뱃지: 배경 + 흰색 텍스트 */}
+              <span
+                className={`${postClasses.badge({ isActive })} ${
+                  isActive ? getBadgeBgClass(percentage) : ''
+                }`}>
+                기존 시급보다 {percentage}%
+                <BadgeArrow className={postClasses.badgeArrow()} />
               </span>
 
-              {/* 모바일/태블릿용 뱃지 텍스트 */}
-              <span className={postClasses.badgeText({ isActive })}>
-                기존 시급보다 50%
-                <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 14 14"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9.03333 13.2H4.03333V6.53333H0L6.53333 0L13.0667 6.53333H9.03333V13.2Z" />
-                </svg>
+              {/* 모바일 뱃지: 배경 없음, 텍스트 색상만 */}
+              <span
+                className={`${postClasses.badgeText({ isActive })} ${
+                  isActive ? getBadgeTextColorClass(percentage) : ''
+                }`}>
+                기존 시급보다 {percentage}%
+                <BadgeArrow className={postClasses.badgeArrow()} />
               </span>
             </>
           )}
