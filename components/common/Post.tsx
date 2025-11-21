@@ -45,7 +45,7 @@ const Post = ({
 
       <div className="flex flex-col gap-2">
         {/* 가게 이름 */}
-        <h3 className={postClasses.title({ isActive })}>{name}</h3>
+        <h2 className={postClasses.title({ isActive })}>{name}</h2>
 
         {/* 근무 시간 */}
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
