@@ -64,9 +64,9 @@ const Post = ({
 
         {/* 시급 */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <h2 className={postClasses.wage({ isActive })}>
+          <h3 className={postClasses.wage({ isActive })}>
             {wage.toLocaleString()}원
-          </h2>
+          </h3>
           {isBadge && (
             <>
               {/* 뱃지 (sm 이상에만 표시) */}
