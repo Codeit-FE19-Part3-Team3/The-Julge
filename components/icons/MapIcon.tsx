@@ -1,6 +1,4 @@
-interface IconProps {
-  className?: string;
-}
+import { IconProps } from '@/types/icon';
 
 const MapIcon = ({ className }: IconProps) => (
   <svg
