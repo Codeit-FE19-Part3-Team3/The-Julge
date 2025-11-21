@@ -58,11 +58,11 @@ export const postClasses = {
     }
   ),
   badge: cva(
-    'ml-2 hidden h-[36px] items-center gap-[6px] rounded-full px-3 text-[14px] font-[600] tracking-[0.05em] text-white sm:flex',
+    'ml-2 hidden h-[36px] items-center gap-[6px] rounded-full px-3 text-[14px] font-[600] tracking-[0.05em] text-white sm:flex whitespace-nowrap',
     {
       variants: {
         isActive: {
-          true: 'bg-[var(--color-red-40)]',
+          true: '',
           false: 'bg-[var(--color-gray-30)]',
         },
       },
@@ -76,7 +76,7 @@ export const postClasses = {
     {
       variants: {
         isActive: {
-          true: 'fill-[var(--color-red-40)] text-[var(--color-red-40)]',
+          true: '',
           false: 'fill-[var(--color-gray-30)] text-[var(--color-gray-30)]',
         },
       },
@@ -85,4 +85,5 @@ export const postClasses = {
       },
     }
   ),
+  badgeArrow: cva('h-[13px] w-[13px] sm:h-[14px] sm:w-[14px]'),
 };
