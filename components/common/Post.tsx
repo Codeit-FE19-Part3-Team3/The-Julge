@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 import ClockIcon from '@/components/icons/ClockIcon';
 import MapIcon from '@/components/icons/MapIcon';
 import { formatWorkTime } from '@/lib/utils/formatWorkTime';
@@ -25,7 +27,12 @@ const Post = ({
   isActive = true,
   percentage,
 }: StoreInfo) => {
-  const displayWorkTime = formatWorkTime(startAt, workTime); // 시작 시간과 몇 시간 일하는지로 근무 시간 구하기
+  // 클라이언트에서만 근무 시간 계산
+  const [displayWorkTime, setDisplayWorkTime] = useState('');
+
+  useEffect(() => {
+    setDisplayWorkTime(formatWorkTime(startAt, workTime));
+  }, [startAt, workTime]);
 
   // 데스크탑: 배경색
   const getBadgeBgClass = (percentage: number) => {
