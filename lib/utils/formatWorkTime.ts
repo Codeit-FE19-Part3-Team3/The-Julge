@@ -6,12 +6,6 @@ export function formatWorkTime(startAt: string, durationHours: number) {
   const startDate = new Date(startAt);
   const now = new Date();
 
-  const isExpired = startDate < now; // 시작 시간이 이미 지났는지
-
-  if (isExpired) {
-    return { text: '지난 공고', isExpired: true };
-  }
-
   // 종료 시간 계산
   const endDate = new Date(startDate);
   endDate.setHours(endDate.getHours() + durationHours);
@@ -22,8 +16,10 @@ export function formatWorkTime(startAt: string, durationHours: number) {
   const startTimeStr = `${pad(startDate.getHours())}:${pad(startDate.getMinutes())}`;
   const endTimeStr = `${pad(endDate.getHours())}:${pad(endDate.getMinutes())}`;
 
+  const text = `${dateStr} ${startTimeStr}~${endTimeStr} (${durationHours}시간)`;
+
   return {
-    text: `${dateStr} ${startTimeStr}~${endTimeStr} (${durationHours}시간)`,
-    isExpired: false,
+    text,
+    isExpired: startDate < now,
   };
 }
