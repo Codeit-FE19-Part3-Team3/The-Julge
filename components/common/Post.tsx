@@ -28,10 +28,11 @@ const Post = ({
   percentage,
 }: StoreInfo) => {
   // 클라이언트에서만 근무 시간 계산
-  const [displayWorkTime, setDisplayWorkTime] = useState('');
+  // 지난공고 여부도 받아옴
+  const [workInfo, setWorkInfo] = useState({ text: '', isExpired: false });
 
   useEffect(() => {
-    setDisplayWorkTime(formatWorkTime(startAt, workTime));
+    setWorkInfo(formatWorkTime(startAt, workTime));
   }, [startAt, workTime]);
 
   // 데스크탑: 배경색
@@ -56,11 +57,11 @@ const Post = ({
           alt={`${name} 사진`}
           className="h-full w-full rounded-[12px] object-cover"
         />
-        {/* isActive === false 일 때만 오버레이 표시 */}
-        {!isActive && (
+        {/* 비활성화 상태이거나 지난 공고 상태일 때 */}
+        {(!isActive || workInfo.isExpired) && (
           <div className="absolute inset-0 flex items-center justify-center rounded-[12px] bg-black/70">
             <span className="text-[20px] font-[700] tracking-[0.02em] text-[var(--color-gray-30)] sm:text-[28px]">
-              지난 공고
+              {workInfo.isExpired ? '지난 공고' : '마감 완료'}
             </span>
           </div>
         )}
@@ -75,7 +76,7 @@ const Post = ({
           <div className="flex items-start gap-2">
             <ClockIcon className={postClasses.icon({ isActive })} />
             <time className={postClasses.text({ isActive })}>
-              {displayWorkTime}
+              {workInfo.text}
             </time>
           </div>
         </div>
