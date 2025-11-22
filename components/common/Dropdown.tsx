@@ -67,7 +67,7 @@ const Dropdown = ({ items, onSelect, onClose, className }: DropdownProps) => {
         'border-gray-20 absolute top-full left-0 z-50 mt-2 w-full overflow-hidden rounded-md border bg-white shadow-lg',
         className
       )}>
-      <ul className="scrollbar-always max-h-[230px] overflow-y-auto">
+      <ul role="listbox" className="scrollbar-always max-h-[230px] overflow-y-auto">
         {items.map((item, index) => (
           <li
             key={`${item}-${index}`}
