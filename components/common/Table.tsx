@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import Pagination from './Pagination';
 
@@ -58,11 +58,20 @@ interface TableProps {
 
 const Table = ({ columns, data, rowKey = 'id' }: TableProps) => {
   const [page, setPage] = useState(1);
-  const offset = (page - 1) * LIMIT;
-  const displayData = data.slice(offset, offset + LIMIT);
 
-  const rightFixedColumns = columns.filter((col) => col.fixed === 'right');
-  const scrollableColumns = columns.filter((col) => col.fixed !== 'right');
+  // useMemo로 displayData 메모이제이션
+  const displayData = useMemo(() => {
+    const offset = (page - 1) * LIMIT;
+    return data.slice(offset, offset + LIMIT);
+  }, [data, page]);
+
+  const { rightFixedColumns, scrollableColumns } = useMemo(
+    () => ({
+      rightFixedColumns: columns.filter((col) => col.fixed === 'right'),
+      scrollableColumns: columns.filter((col) => col.fixed !== 'right'),
+    }),
+    [columns]
+  );
 
   const getColumnClassName = (col: Column) => {
     return WIDTH_CLASSES[col.key] || 'w-auto';
@@ -116,7 +125,7 @@ const Table = ({ columns, data, rowKey = 'id' }: TableProps) => {
         </div>
 
         {/* 부모 요소의 크기가 964px 미만 */}
-        <div className="relative block @[963px]:hidden">
+        <div className="relative block @[964px]:hidden">
           <div className="flex overflow-hidden rounded-xl">
             {/* 스크롤 컬럼 */}
             <div className="overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [-webkit-scrollbar]:hidden">
