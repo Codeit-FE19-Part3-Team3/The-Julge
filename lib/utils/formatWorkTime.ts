@@ -6,9 +6,10 @@ export function formatWorkTime(startAt: string, durationHours: number) {
   const startDate = new Date(startAt);
   const now = new Date();
 
-  // 현재 시간 이후만 표시
-  if (startDate < now) {
-    return '시작 시간 지난 근무';
+  const isExpired = startDate < now; // 시작 시간이 이미 지났는지
+
+  if (isExpired) {
+    return { text: '지난 공고', isExpired: true };
   }
 
   // 종료 시간 계산
@@ -21,5 +22,8 @@ export function formatWorkTime(startAt: string, durationHours: number) {
   const startTimeStr = `${pad(startDate.getHours())}:${pad(startDate.getMinutes())}`;
   const endTimeStr = `${pad(endDate.getHours())}:${pad(endDate.getMinutes())}`;
 
-  return `${dateStr} ${startTimeStr}~${endTimeStr} (${durationHours}시간)`;
+  return {
+    text: `${dateStr} ${startTimeStr}~${endTimeStr} (${durationHours}시간)`,
+    isExpired: false,
+  };
 }
