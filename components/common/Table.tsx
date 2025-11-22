@@ -1,3 +1,37 @@
+import { useState } from 'react';
+
+import Pagination from './Pagination';
+
+/** 사용 예제
+ * 
+const Ex = () => {
+  const columns = [
+    { key: 'name', label: '가게', fixed: 'left' as const },
+    { key: 'date', label: '일자' },
+    { key: 'price', label: '시급' },
+    { key: 'status', label: '상태', fixed: 'right' as const },
+  ];
+
+  const data = [
+    {
+      name: 'HS 과일주스',
+      date: '2023-01-12 10:00 ~ 12:00 (2시간)',
+      price: '15,000원',
+      status: '승인 완료',
+    },
+    // ... 더 많은 데이터
+  ];
+
+  return (
+    <div className="flex flex-col items-start">
+      <Table columns={columns} data={data} />
+    </div>
+  );
+};
+ */
+
+const LIMIT = 5;
+
 interface Column {
   key: string;
   label: string;
@@ -10,7 +44,9 @@ interface TableProps {
 }
 
 const Table = ({ columns, data }: TableProps) => {
-  const displayData = data.slice(0, 5);
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * LIMIT;
+  const displayData = data.slice(offset, offset + LIMIT);
 
   const rightFixedColumns = columns.filter((col) => col.fixed === 'right');
   const scrollableColumns = columns.filter((col) => col.fixed !== 'right');
@@ -130,6 +166,14 @@ const Table = ({ columns, data }: TableProps) => {
           )}
         </div>
       </div>
+
+      {/* Pagination 컴포넌트 */}
+      <Pagination
+        total={data.length}
+        limit={LIMIT}
+        page={page}
+        setPage={setPage}
+      />
     </div>
   );
 };
