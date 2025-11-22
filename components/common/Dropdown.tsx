@@ -29,10 +29,13 @@ const Dropdown = ({ items, onSelect, onClose, className }: DropdownProps) => {
         'border-gray-20 absolute top-full left-0 z-50 mt-2 w-full overflow-hidden rounded-md border bg-white shadow-lg',
         className
       )}>
-      <ul role="listbox" className="scrollbar-always max-h-[230px] overflow-y-auto">
-        {items.map((item) => (
+      <ul className="scrollbar-always max-h-[230px] overflow-y-auto">
+        {items.map((item, index) => (
           <li
-            key={item}
+            key={`${item}-${index}`}
+            id={`dropdown-item-${index}`}
+            role="option"
+            aria-selected={false}
             onClick={() => onSelect(item)}
             className="border-gray-20 cursor-pointer border-b px-3 py-3 text-center hover:bg-gray-100">
             {item}
