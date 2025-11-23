@@ -7,4 +7,5 @@ module.exports = {
     'text-[var(--color-red-30)]',
     'text-[var(--color-red-20)]',
   ],
+  plugins: [require('@tailwindcss/line-clamp')],
 };
