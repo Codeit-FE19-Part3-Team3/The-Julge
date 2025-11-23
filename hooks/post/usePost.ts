@@ -33,6 +33,7 @@ export const usePost = ({
     ];
     const matched =
       levels.find((lv) => percentage >= lv.limit) ?? levels[levels.length - 1];
+
     return isBackground
       ? `bg-[var(--color-${matched.color})] text-white`
       : `text-[var(--color-${matched.color})]`;
