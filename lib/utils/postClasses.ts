@@ -29,7 +29,7 @@ export const postClasses = {
       isActive: true,
     },
   }),
-  text: cva("font-['Spoqa Han Sans Neo']font-[400]", {
+  text: cva("font-['Spoqa Han Sans Neo'] font-[400]", {
     variants: {
       isActive: {
         true: 'text-[var(--color-gray-50)]',
