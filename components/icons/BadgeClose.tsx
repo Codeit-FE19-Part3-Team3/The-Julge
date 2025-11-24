@@ -1,4 +1,8 @@
-const BadgeClose = ({ className }: { className?: string }) => (
+interface BadgeCloseProps {
+  className?: string;
+}
+
+const BadgeClose = ({ className }: BadgeCloseProps) => (
   <svg
     className={className}
     width="100%"
