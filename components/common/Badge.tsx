@@ -1,5 +1,95 @@
-const Badge = () => {
-  return <></>;
+import { HTMLAttributes } from 'react';
+
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import BadgeClose from '@/components/icons/BadgeClose';
+import { cn } from '@/lib/utils';
+
+/**
+ *
+ const Ex = () => {
+
+ return (
+    <div className="mx-5 my-5 inline-flex gap-4">
+      <Badge status="">대기중</Badge>
+      <Badge status="accepted">승인됨</Badge>
+      <Badge status="accepted">승인 완료</Badge>
+      <Badge status="rejected">거절</Badge>
+      <Badge status="canceled">취소</Badge>
+      <Badge variant="filter" removable onRemove={() => console.log('removed')}>
+        서울시 강남구
+      </Badge>
+    </div>
+  );
+};
+ */
+
+type BadgeVariant = 'primary' | 'secondary' | 'danger' | 'filter';
+type BadgeStatus = '' | 'accepted' | 'rejected' | 'canceled';
+
+// 공통 반응형 스타일
+const commonResponsiveStyles =
+  'text-xs font-normal leading-4 md:text-sm md:font-bold md:leading-normal lg:text-sm lg:font-bold lg:leading-normal';
+
+const badgeVariants = cva(
+  'inline-flex justify-center items-center font-bold rounded-[20px] py-[6px] px-[10px]',
+  {
+    variants: {
+      variant: {
+        primary: `text-green-20 bg-green-10 ${commonResponsiveStyles}`,
+        secondary: `text-blue-20 bg-blue-10 ${commonResponsiveStyles}`,
+        danger: `text-red-50 bg-red-10 ${commonResponsiveStyles}`,
+        filter: 'text-red-50 bg-red-10 text-sm font-bold leading-normal gap-1',
+      },
+    },
+    defaultVariants: {
+      variant: 'primary',
+    },
+  }
+);
+
+interface BadgeProps
+  extends HTMLAttributes<HTMLSpanElement>,
+    VariantProps<typeof badgeVariants> {
+  removable?: boolean;
+  onRemove?: () => void;
+  status?: BadgeStatus;
+}
+
+const Badge: React.FC<BadgeProps> = ({
+  children,
+  variant = 'primary',
+  removable = false,
+  onRemove,
+  className = '',
+  status,
+  ...props
+}) => {
+  // status를 variant로 매핑
+  const getVariantFromStatus = (): BadgeVariant => {
+    if (status === 'accepted') return 'secondary';
+    if (status === 'rejected' || status === 'canceled') return 'danger';
+    return variant || `primary`;
+  };
+
+  const finalVariant = status ? getVariantFromStatus() : variant;
+
+  return (
+    <div
+      className={cn(badgeVariants({ variant: finalVariant }), className)}
+      {...props}>
+      <span>{children}</span>
+      {removable && (
+        <button
+          type="button"
+          onClick={onRemove}
+          className="ml-1 transition-opacity hover:opacity-70"
+          aria-label="Remove badge">
+          <BadgeClose className="h-4 w-4" />
+        </button>
+      )}
+    </div>
+  );
 };
 
 export default Badge;
