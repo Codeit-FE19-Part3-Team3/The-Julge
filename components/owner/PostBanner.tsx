@@ -103,7 +103,6 @@ const PostBanner = ({
         <div className="flex h-[48px] w-full max-[744px]:mt-[40px] max-[744px]:h-[48px] max-[375px]:mt-[24px] max-[375px]:h-[38px]">
           <Button
             variant="secondary"
-            size={undefined}
             className="h-full max-w-none flex-1">
             공고 편집하기
           </Button>
