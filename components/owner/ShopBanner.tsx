@@ -38,7 +38,7 @@ interface ShopBannerProps {
 }
 
 const ShopBanner = ({
-  cartegory,
+  category,
   name,
   location,
   imageUrl,
