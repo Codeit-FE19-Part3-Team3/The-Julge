@@ -1,64 +1,70 @@
 import Tippy from '@tippyjs/react';
 
-import { postClasses } from '@/lib/utils/postClasses';
+import { usePost } from '@/hooks/post/usePost';
 
 import Button from '../common/Button';
 import PostImage from '../post/PostImage';
 import PostLocation from '../post/PostLocation';
+import PostTime from '../post/PostTime';
+import PostWage from '../post/PostWage';
 import 'tippy.js/dist/tippy.css';
 
 interface StoreInfo {
-  cartegory:
-    | '한식'
-    | '중식'
-    | '일식'
-    | '양식'
-    | '분식'
-    | '카페'
-    | '편의점'
-    | '기타';
   name: string;
+  startAt: string;
+  workTime: number;
   location: string;
+  wage: number;
   imageUrl: string;
+  percentage?: number;
   description: string;
 }
 
-const ShopBanner = ({
-  cartegory,
+const PostBanner = ({
   name,
+  startAt,
+  workTime,
   location,
+  wage,
   imageUrl,
   description,
+  percentage,
 }: StoreInfo) => {
+  const { workInfo, isColor, getBadgeColor } = usePost({
+    startAt,
+    workTime,
+  });
+
   return (
-    <div className="mx-auto flex w-[964px] gap-6 rounded-[12px] bg-[var(--color-red-10)] p-6 max-[744px]:w-[680px] max-[744px]:flex-col max-[744px]:gap-4 max-[375px]:w-[351px] max-[375px]:gap-3 max-[375px]:p-5">
+    <div className="mx-auto flex w-[964px] gap-6 rounded-[12px] border border-[var(--color-gray-20)] bg-[var(--color-white)] p-6 max-[744px]:w-[680px] max-[744px]:flex-col max-[744px]:gap-4 max-[375px]:w-[351px] max-[375px]:gap-3 max-[375px]:p-5">
       {/* 이미지 영역 */}
       <div className="h-[312px] w-[539px] max-[744px]:h-[360.858px] max-[744px]:w-full max-[375px]:h-[177.71px] max-[375px]:w-full">
         <PostImage imageUrl={imageUrl} name={name} isColor={true} />
       </div>
 
       {/* 정보 영역 */}
-      <div className="flex w-[346px] flex-1 flex-col justify-between pt-4 max-[744px]:w-full max-[744px]:pt-0 max-[375px]:w-full max-[375px]:pt-0">
-        <div>
-          {/* 카테고리 */}
-          <span className="text-[16px] leading-[20px] font-[700] tracking-[0%] text-[var(--color-red-50)]">
-            {cartegory}
+      <div className="flex w-[346px] flex-1 flex-col max-[744px]:w-full max-[375px]:w-full">
+        {/* 내용 영역 */}
+        <div className="flex-1 pt-4 max-[744px]:pt-0 max-[375px]:pt-0">
+          <span className="text-[16px] leading-[20px] font-[700] text-[var(--color-red-50)] max-[375px]:text-[14px]">
+            시급
           </span>
-
           <div className="h-[8px]" />
-
-          {/* 가게 이름 */}
-          <h2
-            className={`${postClasses.title()} !text-[28px] max-[744px]:!text-[24px]`}>
-            {name}
-          </h2>
+          <div className="w-[293px]">
+            <PostWage
+              wage={wage}
+              percentage={percentage}
+              isColor={isColor}
+              getBadgeColor={getBadgeColor}
+              size="md"
+            />
+          </div>
 
           <div className="h-[12px]" />
-
-          {/* 위치 */}
+          <PostTime workInfo={workInfo} isColor={isColor} />
+          <div className="h-[12px]" />
           <PostLocation location={location} isColor={true} size="md" />
 
-          {/* description */}
           <Tippy
             trigger="mouseenter focus"
             content={description}
@@ -79,16 +85,13 @@ const ShopBanner = ({
           </Tippy>
         </div>
 
-        {/* 버튼 영역 */}
-        <div className="mt-[54px] flex h-[48px] w-full gap-2 max-[744px]:mt-[40px] max-[375px]:mt-[24px] max-[375px]:h-[38px]">
+        {/* 버튼 영역: 항상 아래 */}
+        <div className="flex h-[48px] w-full max-[744px]:mt-[40px] max-[744px]:h-[48px] max-[375px]:mt-[24px] max-[375px]:h-[38px]">
           <Button
             variant="secondary"
             size={undefined}
             className="h-full max-w-none flex-1">
-            편집하기
-          </Button>
-          <Button size={undefined} className="h-full max-w-none flex-1">
-            공고 등록하기
+            공고 편집하기
           </Button>
         </div>
       </div>
@@ -96,4 +99,4 @@ const ShopBanner = ({
   );
 };
 
-export default ShopBanner;
+export default PostBanner;
