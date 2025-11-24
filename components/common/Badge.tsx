@@ -24,7 +24,6 @@ import { cn } from '@/lib/utils';
 };
  */
 
-type BadgeVariant = 'primary' | 'secondary' | 'danger' | 'filter';
 type BadgeStatus = 'accepted' | 'rejected' | 'canceled';
 
 // 공통 반응형 스타일
@@ -48,6 +47,19 @@ const badgeVariants = cva(
   }
 );
 
+// status를 variant로 매핑
+const getVariantFromStatus = (
+  statusToMap: BadgeStatus
+): 'secondary' | 'danger' => {
+  switch (statusToMap) {
+    case 'accepted':
+      return 'secondary';
+    case 'rejected':
+    case 'canceled':
+      return 'danger';
+  }
+};
+
 interface BadgeProps
   extends HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {
@@ -63,19 +75,7 @@ const Badge: React.FC<BadgeProps> = ({
   status,
   ...props
 }) => {
-  // status를 variant로 매핑
-  const getVariantFromStatus = (statusToMap: BadgeStatus): BadgeVariant => {
-    switch (statusToMap) {
-      case 'accepted':
-        return 'secondary';
-      case 'rejected':
-      case 'canceled':
-        return 'danger';
-      default:
-        return 'primary';
-    }
-  };
-
+  // status prop이 전달되면 자동으로 variant를 결정하고, 그렇지 않으면 명시적으로 전달된 variant를 사용
   const finalVariant =
     status !== undefined ? getVariantFromStatus(status) : variant;
 
