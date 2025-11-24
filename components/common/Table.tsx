@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 
+import Badge, { BadgeStatus } from './Badge';
 import Pagination from './Pagination';
 
 /** 사용 예제
@@ -18,7 +19,7 @@ const Ex = () => {
       name: 'HS 과일주스',
       workhour: '2023-01-12 10:00 ~ 12:00 (2시간)',
       hourlyPay: '15,000원',
-      status: '승인 완료',
+      status: 'accepted',
     },
     // ... 더 많은 데이터
   ];
@@ -108,7 +109,13 @@ const Table = <T extends Record<string, React.ReactNode>>({
               <td
                 key={col.key}
                 className={`${getColumnClassName(col)} px-3 py-5 text-[14px] leading-[22px] sm:text-[16px]`}>
-                {row[col.key]}
+                {col.key === 'status' ? (
+                  // TODO : 사장님/알바님에 따른 텍스트 또는 버튼 표시
+                  // status="" 일 때, 사장님은 거절하기 & 승인하기 버튼 표시 / 알바님는 "대기중"
+                  <Badge status={row[col.key] as BadgeStatus} />
+                ) : (
+                  row[col.key]
+                )}
               </td>
             ))}
           </tr>
