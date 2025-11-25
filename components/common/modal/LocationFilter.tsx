@@ -8,7 +8,7 @@ const locationItemVariants = cva(
   {
     variants: {
       selected: {
-        true: 'text-red-40 border-red-50',
+        true: 'text-red-40',
         false: 'bg-white text-black hover:text-red-40',
       },
     },

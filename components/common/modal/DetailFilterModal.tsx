@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
@@ -60,8 +60,7 @@ const DetailFilterModal = ({
     onClose();
   };
 
-  // initialValues가 변경되면 내부 상태 동기화
-  useState(() => {
+  useEffect(() => {
     setSelectedLocations(initialValues?.locations || []);
     setStartDate(initialValues?.startDate || '');
     setAmount(initialValues?.amount || '');
@@ -71,7 +70,7 @@ const DetailFilterModal = ({
 
   return (
     <>
-      {/* Backdrop - 모바일에서만 표시 */}
+      {/* 모바일 대응 */}
       <div
         className="bg-opacity-50 fixed inset-0 z-40 bg-black md:hidden"
         onClick={onClose}
@@ -80,10 +79,10 @@ const DetailFilterModal = ({
       {/* Modal */}
       <div
         className={cn(
-          // 모바일: fixed full screen with slide animation
+          // 모바일
           'fixed inset-0 z-50 bg-white transition-transform duration-300',
           isOpen ? 'translate-x-0' : 'translate-x-full',
-          // PC/Tablet: absolute dropdown 형태
+          // PC/Tablet
           'md:absolute md:inset-auto md:top-full md:right-0 md:translate-x-0',
           'md:border-gray-20 md:mt-2 md:h-auto md:w-[400px] md:rounded-[10px] md:border md:shadow-lg'
         )}>
@@ -152,7 +151,7 @@ const DetailFilterModal = ({
                 onChange={setAmount}
                 unit="원"
                 placeholder="금액을 입력하세요"
-                className="w-50"
+                className="w-[200px]"
               />
               <p className="pl-3 leading-[58px]">이상부터</p>
             </div>
