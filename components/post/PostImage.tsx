@@ -9,7 +9,7 @@ const PostImage = ({
   overlayText,
 }: PostImageProps) => {
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-[12px] object-cover">
+    <div className="relative h-full w-full overflow-hidden rounded-[12px]">
       <Image
         src={imageUrl}
         alt={`${name} 사진`}
