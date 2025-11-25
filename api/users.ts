@@ -14,7 +14,7 @@ const users = {
    */
   signup: async (data: SignupRequest) => {
     const response = await api.post<SignupResponse>('/users', data);
-    return response.item;
+    return response;
   },
 };
 
