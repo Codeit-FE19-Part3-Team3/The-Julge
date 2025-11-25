@@ -14,7 +14,7 @@
 /**
  * API 공통 타입
  */
-interface ApiLink {
+export interface ApiLink {
   rel: string;
   description: string;
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
