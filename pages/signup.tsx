@@ -8,6 +8,7 @@ import { SignupRequest, UserType } from '@/api/types';
 import AuthRedirect from '@/components/auth/AuthRedirect';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
+import { cn } from '@/lib/utils';
 
 // 회원 유형 옵션
 const USER_TYPE_OPTIONS = [
@@ -37,7 +38,10 @@ const Signup = () => {
   });
 
   // 폼 데이터 업데이트 함수
-  const handleInputChange = (field: string, value: string | UserType) => {
+  const handleInputChange = (
+    field: keyof typeof formData,
+    value: string | UserType
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -45,7 +49,10 @@ const Signup = () => {
   };
 
   // 에러 업데이트 함수
-  const handleErrorChange = (field: string, message: string) => {
+  const handleErrorChange = (
+    field: keyof typeof formErrors,
+    message: string
+  ) => {
     setFormErrors((prev) => ({
       ...prev,
       [field]: message,
@@ -71,14 +78,16 @@ const Signup = () => {
         key={option.type}
         type="button"
         onClick={() => handleInputChange('userType', option.type)}
-        className={`flex flex-[1_0_0] flex-col items-start gap-2 rounded-[30px] border bg-white px-[41px] py-[13px] transition-all ${
+        className={cn(
+          'flex flex-[1_0_0] flex-col items-start gap-2 rounded-[30px] border bg-white px-[41px] py-[13px] transition-all',
           isSelected ? 'border-red-50' : 'border-gray-30'
-        }`}>
+        )}>
         <div className="flex items-center justify-center gap-2">
           <div
-            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
+            className={cn(
+              'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border',
               isSelected ? 'border-red-50 bg-red-50' : 'border-gray-30'
-            }`}>
+            )}>
             {isSelected && (
               <Image
                 src="/images/checked.svg"
@@ -98,12 +107,43 @@ const Signup = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 에러 확인
-    if (formErrors.email || formErrors.password || formErrors.passwordConfirm)
+    // 모든 필드에 대한 유효성 검사 수행
+    const newErrors = {
+      email: '',
+      password: '',
+      passwordConfirm: '',
+    };
+    let formIsValid = true;
+
+    if (!formData.email) {
+      newErrors.email = '값을 입력해 주세요.';
+      formIsValid = false;
+    } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = '이메일 형식으로 작성해 주세요.';
+      formIsValid = false;
+    }
+
+    if (!formData.password) {
+      newErrors.password = '값을 입력해 주세요.';
+      formIsValid = false;
+    } else if (formData.password.length < 8) {
+      newErrors.password = '8자 이상 입력해 주세요.';
+      formIsValid = false;
+    }
+
+    if (!formData.passwordConfirm) {
+      newErrors.passwordConfirm = '값을 입력해 주세요.';
+      formIsValid = false;
+    } else if (formData.password !== formData.passwordConfirm) {
+      newErrors.passwordConfirm = '비밀번호가 일치하지 않습니다.';
+      formIsValid = false;
+    }
+
+    setFormErrors(newErrors);
+
+    if (!formIsValid) {
       return;
-    // 빈 값 체크
-    if (!formData.email || !formData.password || !formData.passwordConfirm)
-      return;
+    }
 
     // 회원가입 로직 처리
     const signupData: SignupRequest = {
@@ -112,6 +152,7 @@ const Signup = () => {
       type: formData.userType,
     };
 
+    // TODO: API 호출 로직으로 대체 필요
     console.log('회원가입 데이터:', signupData);
   };
 
