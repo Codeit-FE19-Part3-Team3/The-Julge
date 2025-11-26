@@ -16,8 +16,9 @@ const MyShop = () => {
         const userId = localStorage.getItem('userId');
 
         if (!userId) {
-          console.log('로그인 정보 없음 → 로그인 필요');
+          setError('가게 정보를 보려면 로그인이 필요합니다.');
           return;
+        }
         }
 
         const userRes = await users.getUser(userId);
