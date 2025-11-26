@@ -36,6 +36,7 @@ export enum UserType {
  * 사용자 정보
  */
 export interface User {
+  [x: string]: any;
   id: string;
   email: string;
   type: UserType;
@@ -43,6 +44,10 @@ export interface User {
   phone?: string;
   address?: string;
   bio?: string;
+  shop?: {
+    item: Shop;
+  } | null;
+  links?: ApiLink[];
 }
 
 /**
@@ -74,6 +79,7 @@ export interface LoginRequest {
  * 로그인 응답 타입
  */
 export interface LoginResponse {
+  data: any;
   item: {
     token: string; // JWT 토큰
     user: {
@@ -82,4 +88,55 @@ export interface LoginResponse {
     };
   };
   links: ApiLink[];
+}
+/**
+ * 가게
+ */
+export interface Shop {
+  id: string;
+  name: string;
+  category: string;
+  address1: string;
+  address2: string;
+  description: string;
+  imageUrl: string;
+  originalHourlyPay: number;
+  user?: {
+    item: User;
+    href: string;
+  };
+}
+/**
+ * Shop이 item으로 감싸져서 반환될 때
+ */
+export interface ShopResponse {
+  item: Shop;
+  links?: any[];
+}
+/**
+ * 공고
+ */
+
+/** 가게 공고 정보 */
+export interface NoticeItem {
+  id: string;
+  hourlyPay: number;
+  startsAt: string;
+  workhour: number;
+  description: string;
+  closed: boolean;
+}
+
+export interface Notice {
+  item: NoticeItem;
+  links?: ApiLink[];
+}
+
+export interface NoticeListResponse {
+  offset: number;
+  limit: number;
+  count: number;
+  hasNext: boolean;
+  items: Notice[];
+  links?: ApiLink[];
 }
