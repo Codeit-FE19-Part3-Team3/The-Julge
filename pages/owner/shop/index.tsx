@@ -6,7 +6,7 @@ import Button from '@/components/common/Button';
 import ShopBanner from '@/components/owner/ShopBanner';
 
 const MyShop = () => {
-  const [shop, setShop] = useState<any>(null);
+  const [shop, setShop] = useState<Shop | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
