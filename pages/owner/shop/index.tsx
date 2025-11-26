@@ -21,7 +21,7 @@ const MyShop = () => {
         }
 
         const userRes = await users.getUser(userId);
-        const user = userRes?.data?.item;
+        const user = userRes?.item;
 
         const shopItem = user?.shop?.item;
         if (!shopItem) {
