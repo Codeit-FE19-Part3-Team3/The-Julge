@@ -10,8 +10,9 @@ const logoutHandler = (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   // 쿠키 삭제 (Max-Age=0)
+  const isProduction = process.env.NODE_ENV === 'production';
   res.setHeader('Set-Cookie', [
-    'token=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0',
+    `token=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${isProduction ? '; Secure' : ''}`,
   ]);
 
   res.status(200).json({ message: '로그아웃 성공' });
