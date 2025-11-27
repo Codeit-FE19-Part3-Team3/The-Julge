@@ -1,5 +1,3 @@
-
-
 interface NotificationItemProps {
   message: string;
   status: string;
@@ -12,40 +10,37 @@ export default function NotificationItem({
   time,
 }: NotificationItemProps) {
   return (
-    <div className="p-3 bg-white rounded-lg shadow-sm border">
-      <div className="flex items-start gap-2">
-        {/* 빨간/파란 점 */}
+    <div className="px-4 pt-2 pb-4 bg-white rounded-lg border shadow-sm flex flex-col gap-2">
+      {/*  아이콘 */}
+      <div className="mt-0.1">
         <span
-          className={`w-2 h-2 rounded-full mt-[6px] ${
-            status === "승인" ? "bg-blue-500" : "bg-red-500"
+          className={`inline-block w-[6px] h-[6px] rounded-full ${
+            status === "승인" ? "bg-[#0080FF]" : "bg-[#FF3B30]"
           }`}
         ></span>
-
-        {/* 메시지 */}
-        <div className="flex flex-col">
-          <p className="text-sm">
-            {/** 승인 → 파란색, 거절 → 빨간색 */}
-            {message.split("승인").length > 1 ? (
-              <>
-                {message.split("승인")[0]}
-                <span className="text-blue-600 font-medium">승인</span>
-                {message.split("승인")[1]}
-              </>
-            ) : message.split("거절").length > 1 ? (
-              <>
-                {message.split("거절")[0]}
-                <span className="text-red-600 font-medium">거절</span>
-                {message.split("거절")[1]}
-              </>
-            ) : (
-              message
-            )}
-          </p>
-
-          {/* 시간 */}
-          <span className="text-xs text-gray-500 mt-1">{time}</span>
-        </div>
       </div>
+
+      {/* 메시지 */}
+      <p className="text-sm leading-5">
+        {message.includes("승인") ? (
+          <>
+            {message.split("승인")[0]}
+            <span className="text-[#0080FF] font-medium">승인</span>
+            {message.split("승인")[1]}
+          </>
+        ) : message.includes("거절") ? (
+          <>
+            {message.split("거절")[0]}
+            <span className="text-[#FF3B30] font-medium">거절</span>
+            {message.split("거절")[1]}
+          </>
+        ) : (
+          message
+        )}
+      </p>
+
+      {/* 시간 */}
+      <span className="text-xs text-gray-500">{time}</span>
     </div>
   );
 }

@@ -1,18 +1,35 @@
+// 사용예제
+// import { useState } from "react";
+// import NotificationModal from "@/components/common/notification/notificationmodal";
 
+// export default function Home() {
+//   const [open, setOpen] = useState(false);
+
+//   return (
+//     <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-gray-100">
+//       <button
+//         onClick={() => setOpen(true)}
+//         className="px-4 py-2 bg-white border shadow rounded"
+//       >
+//         알림 모달 열기
+//       </button>
+
+//       {open && <NotificationModal isOpen={open} onClose={() => setOpen(false)} />}
+//     </div>
+//   );
+// }
 
 import { useEffect, useState } from "react";
-import NotificationDesktop from "./notificationdesktop";
-import NotificationMobile from "./notificationmobile";
-
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import NotificationDesktop from "./NotificationDesktop";
+import NotificationMobile from "./NotificationMobile";
 
 export default function NotificationModal({
   isOpen,
   onClose,
-}: ModalProps) {
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
