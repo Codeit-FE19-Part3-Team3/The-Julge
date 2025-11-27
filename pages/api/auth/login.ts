@@ -22,8 +22,8 @@ const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { email, password } = req.body;
 
     const loginData: LoginRequest = {
-      email: email,
-      password: password,
+      email,
+      password,
     };
 
     // 실제 백엔드 API 호출
