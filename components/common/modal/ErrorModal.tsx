@@ -28,15 +28,15 @@
  * };
  */
 
-interface ErrorModalDesktopProps {
+interface ErrorModalProps {
   message: string;
   onClose: () => void;
 }
 
-const ErrorModal = ({ message, onClose }: ErrorModalDesktopProps) => {
+const ErrorModal = ({ message, onClose }: ErrorModalProps) => {
   return (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50">
-      <div className="flex h-[220px] w-[327px] flex-col items-center gap-[50px] rounded-lg bg-white pt-[81px] pb-7 sm:h-[250px] sm:w-[540px] sm:gap-[45px] sm:pt-7 sm:pt-27">
+      <div className="flex h-[220px] w-[327px] flex-col items-center gap-[50px] rounded-lg bg-white pt-[81px] pb-7 sm:h-[250px] sm:w-[540px] sm:gap-[45px] sm:pt-27">
         {/* 메시지 */}
         <p className="text-gray-60 text-base font-medium sm:text-lg">
           {message}
