@@ -126,6 +126,7 @@ export interface ShopResponse {
 
 /** 가게 공고 정보 */
 export interface NoticeItem {
+  shop: any;
   id: string;
   hourlyPay: number;
   startsAt: string;

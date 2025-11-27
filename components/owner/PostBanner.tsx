@@ -1,14 +1,16 @@
 {
-  /* <ShopBanner
-cartegory={'카페'}
-name={'도토리 카페'}
-location={'성수동'}
+  /* <PostBanner
+cartegory={}
+name={}
+startAt={}
+workTime={}}
+location={}
+wage={}
 imageUrl={
   'https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81'
 }
-description={
-  '도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다도토리 카페입니다 도토리 카페입니다 v 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다도토리 카페입니다 도토리 카페입니다 v 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다도토리 카페입니다 도토리 카페입니다 v 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다도토리 카페입니다 도토리 카페입니다 v 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다 도토리 카페입니다  도토리 카페입니다 도토리 카페입니다'
-}
+percentage={}
+description={}
 /> */
 }
 
@@ -24,7 +26,7 @@ import PostWage from '../post/PostWage';
 import 'tippy.js/dist/tippy.css';
 
 interface PostBannerProps {
-  name: string;
+  name?: string;
   startAt: string;
   workTime: number;
   location: string;
