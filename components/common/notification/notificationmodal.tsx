@@ -20,8 +20,8 @@
 // }
 
 import { useEffect, useState } from "react";
-import NotificationDesktop from "./NotificationDesktop";
-import NotificationMobile from "./NotificationMobile";
+import NotificationDesktop from "./notificationdesktop";
+import NotificationMobile from "./notificationmobile";
 
 export default function NotificationModal({
   isOpen,

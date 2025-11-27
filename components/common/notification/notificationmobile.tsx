@@ -1,4 +1,4 @@
-import NotificationItem from "./NotificationItem";
+import NotificationItem from "./notificationitem";
 
 export default function NotificationMobile({
   onClose,
