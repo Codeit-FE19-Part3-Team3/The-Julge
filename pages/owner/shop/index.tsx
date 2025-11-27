@@ -16,7 +16,10 @@ const MyShop = () => {
     const fetchShopAndNotices = async () => {
       try {
         const userId = localStorage.getItem('userId');
-        if (!userId) return;
+        if (!userId) {
+          setError('로그인이 필요합니다.');
+          return;
+        }
 
         const userRes = await users.getUser(userId);
         const user = userRes?.item;
