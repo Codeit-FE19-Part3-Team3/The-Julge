@@ -8,7 +8,7 @@ import ShopBanner from '@/components/owner/ShopBanner';
 import Post from '@/components/post/Post';
 
 const MyShop = () => {
-  const [shop, setShop] = useState<any>(null);
+  const [shop, setShop] = useState<Shop | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [notices, setNotices] = useState<NoticeItem[]>([]);
