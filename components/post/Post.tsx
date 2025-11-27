@@ -14,7 +14,7 @@ interface StoreInfo {
   imageUrl: string;
   isActive?: boolean;
   percentage?: number;
-  className?: string; // 이 줄을 추가합니다.
+  className?: string;
 }
 
 const Post = ({
