@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import shops from '@/api/owner/shop';
-import { NoticeItem } from '@/api/types';
+import { NoticeItem, Shop } from '@/api/types';
 import users from '@/api/users';
 import Button from '@/components/common/Button';
 import ShopBanner from '@/components/owner/ShopBanner';
@@ -12,6 +12,21 @@ const MyShop = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [notices, setNotices] = useState<NoticeItem[]>([]);
+  const allowedCategories = [
+    '한식',
+    '중식',
+    '일식',
+    '양식',
+    '분식',
+    '카페',
+    '편의점',
+    '기타',
+  ] as const;
+
+  const category =
+    shop && allowedCategories.includes(shop.category as any)
+      ? (shop.category as (typeof allowedCategories)[number])
+      : '기타';
   useEffect(() => {
     const fetchShopAndNotices = async () => {
       try {
@@ -78,7 +93,7 @@ const MyShop = () => {
 
           {!loading && !error && shop && (
             <ShopBanner
-              category={shop.category}
+              category={category}
               name={shop.name}
               location={shop.address1}
               imageUrl={shop.imageUrl}
@@ -101,6 +116,7 @@ const MyShop = () => {
                     <Post
                       key={notice.id}
                       name={shop.name}
+                      noticeId={notice.id}
                       startAt={notice.startsAt}
                       workTime={notice.workhour}
                       location={shop.address1}
