@@ -43,8 +43,6 @@
 // }
 // 
 
-"use client";
-
 import { ReactNode, useEffect } from "react";
 
 interface BaseModalProps {
@@ -64,7 +62,7 @@ export default function BaseModal({ isOpen, onClose, children }: BaseModalProps)
     };
   }, [isOpen]);
 
-  // 이에스시키
+  // ESC키
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
