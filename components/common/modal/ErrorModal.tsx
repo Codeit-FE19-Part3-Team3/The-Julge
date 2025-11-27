@@ -1,32 +1,32 @@
-{
-  /* <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-gray-100">
-      <button onClick={() => setDesk(true)} className="px-4 py-2 bg-white shadow border">
-        데스크탑 모달 열기
-      </button>
-
-      
-
-      <button onClick={() => setMob(true)} className="px-4 py-2 bg-white shadow border">
-        모바일 모달 열기
-      </button>
-
-      {desk && (
-        <ErrorModalDesktop
-          message="비밀번호가 일치하지 않습니다."
-          onClose={() => setDesk(false)}
-        />
-      )}
-
-      
-
-      {mob && (
-        <ErrorModalMobile
-          message="비밀번호가 일치하지 않습니다."
-          onClose={() => setMob(false)}
-        />
-      )}
-    </div> */
-}
+/**
+ * ErrorModal 사용 예제
+ *
+ * import { useState } from 'react';
+ * import ErrorModal from './ErrorModal';
+ *
+ * const ParentComponent = () => {
+ *   const [errorOpen, setErrorOpen] = useState(false);
+ *
+ *   return (
+ *     <div className="p-10">
+ *       <button
+ *         onClick={() => setErrorOpen(true)}
+ *         className="border p-2 bg-blue-200"
+ *       >
+ *         Error Modal 열기
+ *       </button>
+ *
+ *       {errorOpen && (
+ *         <ErrorModal
+ *           message="이미 사용중인 이메일입니다"
+ *           onClose={() => setErrorOpen(false)}
+ *         />
+ *       )}
+ *     </div>
+ *     </div>
+ *   );
+ * };
+ */
 
 interface ErrorModalDesktopProps {
   message: string;
