@@ -22,7 +22,7 @@ const USER_TYPE_OPTIONS = [
 // API 메시지 상수
 const API_MESSAGE = {
   SUCCESS: '가입이 완료되었습니다!',
-  DUPLICATE_EMAIL: '이미 가입된 이메일입니다.',
+  DUPLICATE_EMAIL: '이미 사용중인 이메일입니다.',
   INVALID_INPUT: '입력 정보를 다시 확인해 주세요.',
   SIGNUP_FAILED: '회원가입에 실패했습니다.',
   PROCESSING_ERROR: '회원가입 처리 중 오류가 발생했습니다.',
