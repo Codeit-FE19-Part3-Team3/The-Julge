@@ -11,7 +11,7 @@ const shops = {
   },
   // 3) 가게 공고 리스트 조회
   getNotices: async (shop_id: string) => {
-    return api.get<{ items: any[] }>(`/shops/${shop_id}/notices`);
+    return api.get<NoticeListResponse>(`/shops/${shop_id}/notices`);
   },
 };
 export default shops;
