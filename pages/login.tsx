@@ -34,6 +34,9 @@ const Login = () => {
   // seLogin 훅 호출 → mutation 객체 반환
   const loginMutation = useLogin();
 
+  // 로딩 상태 (mutation의 isPending 사용)
+  const isLoading = loginMutation.isPending;
+
   // 폼 데이터 업데이트 함수
   const handleInputChange = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({
@@ -58,11 +61,15 @@ const Login = () => {
     !formData.email ||
     !formData.password ||
     !!formErrors.email ||
-    !!formErrors.password;
+    !!formErrors.password ||
+    isLoading;
 
   // 로그인 처리
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 로딩 중이면 중복 요청 방지
+    if (isLoading) return;
 
     // 모든 필드에 대한 유효성 검사
     const newErrors = {
@@ -147,6 +154,7 @@ const Login = () => {
                 handleErrorChange('email', message)
               }
               placeholder="입력"
+              disabled={isLoading}
             />
 
             {/* 비밀번호 */}
@@ -160,6 +168,7 @@ const Login = () => {
                 handleErrorChange('password', message)
               }
               placeholder="입력"
+              disabled={isLoading}
             />
 
             {/* 로그인 하기 버튼 */}
@@ -168,7 +177,7 @@ const Login = () => {
               variant="primary"
               size="large"
               disabled={isDisabled}>
-              로그인 하기
+              {isLoading ? '로그인 중...' : '로그인 하기'}
             </Button>
           </form>
 
