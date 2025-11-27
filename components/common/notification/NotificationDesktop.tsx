@@ -1,4 +1,6 @@
-import NotificationItem from "./notificationitem";
+"use client";
+
+import NotificationItem from "./NotificationItem";
 
 export default function NotificationDesktop({ onClose }: { onClose: () => void }) {
   const alerts = [

@@ -1,3 +1,5 @@
+"use client";
+
 interface NotificationItemProps {
   message: string;
   status: string;
