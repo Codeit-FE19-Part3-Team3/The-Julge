@@ -91,9 +91,9 @@ export const transformEmployeeData = (
 export const transformApplicationData = (items: ApplicationItem[]) => {
   return items.map((app) => ({
     id: app.id,
-    name: app.user.item.name,
-    bio: app.user.item.bio,
-    phone: app.user.item.phone,
+    name: app.user.item.name ?? '',
+    bio: app.user.item.bio ?? '',
+    phone: app.user.item.phone ?? '',
     status: app.status,
   }));
 };
