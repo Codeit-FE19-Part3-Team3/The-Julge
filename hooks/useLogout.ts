@@ -29,9 +29,6 @@ const useLogout = () => {
       // Zustand에서 토큰과 사용자 정보 제거
       clearAuth();
 
-      // 명시적으로 localStorage 제거
-      localStorage.removeItem('auth-token');
-
       // 모든 캐시 제거
       queryClient.clear();
 
