@@ -28,7 +28,7 @@ const NoticeListPage = () => {
   const router = useRouter();
   const { search: rawSearch } = router.query;
 
-  // 검색 input 상태 추가
+  // 검색 input 상태
   const [searchInput, setSearchInput] = useState('');
 
   // 페이지 상태
@@ -70,7 +70,6 @@ const NoticeListPage = () => {
   // 검색 실행 함수
   const handleSearch = useCallback(() => {
     if (searchInput.trim()) {
-      // 현재 페이지에서 query만 변경
       router.push(
         {
           pathname: router.pathname,
@@ -80,7 +79,6 @@ const NoticeListPage = () => {
         { shallow: true }
       );
     } else {
-      // 검색어가 비어있으면 query 제거
       router.push(
         {
           pathname: router.pathname,
@@ -113,17 +111,41 @@ const NoticeListPage = () => {
     );
   }, [router]);
 
+  // 클라이언트 정렬 함수
+  const sortNotices = useCallback(
+    (notices: TransformedNotice[], targetSort: SortType) => {
+      const sorted = [...notices];
+      switch (targetSort) {
+        case '마감임박순':
+          return sorted.sort(
+            (a, b) =>
+              new Date(a.startAt).getTime() - new Date(b.startAt).getTime()
+          );
+        case '시급많은순':
+          return sorted.sort((a, b) => b.wage - a.wage);
+        case '시간적은순':
+          return sorted.sort((a, b) => a.workTime - b.workTime);
+        case '가나다순':
+          return sorted.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+        default:
+          return sorted;
+      }
+    },
+    []
+  );
+
   // 맞춤 공고 불러오기 (시급 높은 순 3개)
   const loadCustomNotices = useCallback(async () => {
     try {
       const data = await fetchNoticeList({
         offset: 0,
-        limit: 3,
+        limit: 20,
       });
 
       const transformed = data.items
         .map(({ item }) => transformNoticeData(item))
-        .sort((a, b) => b.wage - a.wage);
+        .sort((a, b) => b.wage - a.wage)
+        .slice(0, 3);
 
       setCustomNotices(transformed);
     } catch (error) {
@@ -166,7 +188,11 @@ const NoticeListPage = () => {
       const transformed = data.items.map(({ item }) =>
         transformNoticeData(item)
       );
-      setAllNotices(transformed);
+
+      // 클라이언트에서 정렬
+      const sorted = sortNotices(transformed, sortType);
+
+      setAllNotices(sorted);
       setTotalAllCount(data.count);
     } catch (error) {
       console.error('공고 목록 로딩 실패:', error);
@@ -175,7 +201,7 @@ const NoticeListPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [allPage, filterValues]);
+  }, [allPage, filterValues, sortType, sortNotices]);
 
   // 검색 결과 불러오기
   const loadSearchResults = useCallback(async () => {
@@ -212,7 +238,11 @@ const NoticeListPage = () => {
       const transformed = data.items.map(({ item }) =>
         transformNoticeData(item)
       );
-      setSearchResults(transformed);
+
+      // 클라이언트에서 정렬
+      const sorted = sortNotices(transformed, sortType);
+
+      setSearchResults(sorted);
       setTotalSearchCount(data.count);
     } catch (error) {
       console.error('검색 결과 로딩 실패:', error);
@@ -221,13 +251,19 @@ const NoticeListPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [searchTerm, searchPage, filterValues]);
+  }, [searchTerm, searchPage, filterValues, sortType, sortNotices]);
 
-  // 맞춤 공고 초기 로드
+  // 필터 변경 시 페이지 리셋
   useEffect(() => {
     setAllPage(1);
     setSearchPage(1);
   }, [filterValues]);
+
+  // 정렬 변경 시 페이지 리셋
+  useEffect(() => {
+    setAllPage(1);
+    setSearchPage(1);
+  }, [sortType]);
 
   // 전체 공고 로드
   useEffect(() => {
@@ -238,38 +274,6 @@ const NoticeListPage = () => {
   useEffect(() => {
     if (searchTerm) loadSearchResults();
   }, [searchPage, searchTerm, loadSearchResults]);
-
-  // 클라이언트 사이드 정렬 함수
-  const sortNotices = useCallback(
-    (notices: TransformedNotice[], targetSort: SortType) => {
-      const sorted = [...notices];
-      switch (targetSort) {
-        case '마감임박순':
-          return sorted.sort(
-            (a, b) =>
-              new Date(a.startAt).getTime() - new Date(b.startAt).getTime()
-          );
-        case '시급많은순':
-          return sorted.sort((a, b) => b.wage - a.wage);
-        case '시간적은순':
-          return sorted.sort((a, b) => a.workTime - b.workTime);
-        case '가나다순':
-          return sorted.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
-        default:
-          return sorted;
-      }
-    },
-    []
-  );
-
-  // 처리된 목록 (정렬만 적용)
-  const processedAllNotices = useMemo(() => {
-    return sortNotices(allNotices, sortType);
-  }, [allNotices, sortType, sortNotices]);
-
-  const processedSearchResults = useMemo(() => {
-    return sortNotices(searchResults, sortType);
-  }, [searchResults, sortType, sortNotices]);
 
   // 필터 적용 핸들러
   const handleFilterApply = (values: FilterValues) => {
@@ -290,7 +294,7 @@ const NoticeListPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* 검색 헤더 영역 추가 */}
+      {/* 검색 헤더 영역 */}
       <div className="border-b border-gray-100 bg-white">
         <div className="mx-auto max-w-[964px] px-3 py-8 sm:px-8 lg:px-0">
           <h1 className="mb-4 text-[20px] font-bold text-gray-900 sm:mb-6 sm:text-[24px]">
@@ -396,15 +400,11 @@ const NoticeListPage = () => {
                 </div>
               </div>
 
-              {processedSearchResults.length > 0 ? (
+              {searchResults.length > 0 ? (
                 <>
                   <div className="grid grid-cols-2 gap-3 pb-10 sm:gap-4 lg:grid-cols-3 lg:gap-6">
-                    {processedSearchResults.map((notice) => (
-                      <Post
-                        key={notice.id}
-                        {...notice}
-                        className="max-w-none"
-                      />
+                    {searchResults.map((notice) => (
+                      <Post key={notice.id} {...notice} />
                     ))}
                   </div>
                   <Pagination
@@ -438,7 +438,7 @@ const NoticeListPage = () => {
                           <div
                             key={notice.id}
                             className="w-[calc(50vw-24px)] flex-shrink-0 sm:w-[calc(50vw-32px)]">
-                            <Post {...notice} className="max-w-none" />
+                            <Post {...notice} />
                           </div>
                         ))}
                       </div>
@@ -446,11 +446,7 @@ const NoticeListPage = () => {
                     {/* 데스크탑: 그리드 */}
                     <div className="hidden grid-cols-3 gap-6 lg:grid">
                       {customNotices.map((notice) => (
-                        <Post
-                          key={notice.id}
-                          {...notice}
-                          className="max-w-none"
-                        />
+                        <Post key={notice.id} {...notice} />
                       ))}
                     </div>
                   </>
@@ -514,13 +510,9 @@ const NoticeListPage = () => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pb-10 sm:gap-4 lg:grid-cols-3 lg:gap-6">
-                  {processedAllNotices.length > 0 ? (
-                    processedAllNotices.map((notice) => (
-                      <Post
-                        key={notice.id}
-                        {...notice}
-                        className="max-w-none"
-                      />
+                  {allNotices.length > 0 ? (
+                    allNotices.map((notice) => (
+                      <Post key={notice.id} {...notice} />
                     ))
                   ) : (
                     <div className="col-span-2 py-20 text-center lg:col-span-3">

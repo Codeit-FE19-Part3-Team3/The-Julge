@@ -1,4 +1,4 @@
-// src/utils/transformNotice.ts
+// utils/transformNotice.ts
 import { NoticeItem } from '@/api/notices';
 
 export interface TransformedNotice {

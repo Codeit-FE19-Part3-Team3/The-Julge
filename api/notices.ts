@@ -1,4 +1,3 @@
-// src/api/notices.ts
 import { api } from './client';
 
 export interface ShopItem {
@@ -42,8 +41,8 @@ export interface FetchNoticeListParams {
   limit?: number;
   address?: string[];
   keyword?: string;
-  startsAtGte?: string; // 시작일 필터
-  hourlyPayGte?: number; // 최소 시급 필터
+  startsAtGte?: string;
+  hourlyPayGte?: number;
 }
 
 // 공고 목록 조회
