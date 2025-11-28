@@ -37,7 +37,6 @@ const NoticeDetail = () => {
 
   useEffect(() => {
     if (!noticeId) return;
-
     const fetchNotice = async () => {
       try {
         // 1. 공고 상세 조회
@@ -45,22 +44,20 @@ const NoticeDetail = () => {
         const noticeData = noticeRes.item;
         setNotice(noticeData);
 
-        console.log(noticeData);
-        // 2. 관련 가게 정보
-        if (noticeData.shop?.item) {
-          setShop(noticeData.shop.item);
-        }
-        // 3) 지원자 목록 조회 (shop_id 필요!)
-        const shopId = noticeData.shop.item.id;
-        const applicationsRes = await notices.getApplications(
-          shopId,
-          noticeId as string,
-          0,
-          20
-        );
-        const employerApiData = applicationsRes.items.map((a) => a.item);
+        const shopItem = noticeData.shop?.item;
+        if (shopItem) {
+          setShop(shopItem);
+          // 3) 지원자 목록 조회 (shop_id 필요!)
+          const applicationsRes = await notices.getApplications(
+            shopItem.id,
+            noticeId as string,
+            0,
+            20
+          );
+          const employerApiData = applicationsRes.items.map((a) => a.item);
 
-        setApplications(employerApiData);
+          setApplications(employerApiData);
+        }
       } finally {
         setLoading(false);
       }

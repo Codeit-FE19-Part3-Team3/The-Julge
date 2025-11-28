@@ -32,30 +32,17 @@ const notices = {
     );
   },
 
-  // 5) 지원 승인
-  approveApplication: async (
+  // 5) 지원 상태 변경
+  updateApplicationStatus: async (
     shop_id: string,
     notice_id: string,
-    application_id: string
+    application_id: string,
+    status: 'accepted' | 'rejected'
   ) => {
     return api.put(
       `/shops/${shop_id}/notices/${notice_id}/applications/${application_id}`,
       {
-        status: 'accepted',
-      }
-    );
-  },
-
-  // 6) 지원 거절
-  rejectApplication: async (
-    shop_id: string,
-    notice_id: string,
-    application_id: string
-  ) => {
-    return api.put(
-      `/shops/${shop_id}/notices/${notice_id}/applications/${application_id}`,
-      {
-        status: 'rejected',
+        status,
       }
     );
   },

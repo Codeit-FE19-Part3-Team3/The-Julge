@@ -88,9 +88,6 @@ const MyShop = () => {
             </div>
           )}
 
-          {loading && <div>가게 정보를 불러오는 중...</div>}
-          {error && <div className="text-red-500">{error}</div>}
-
           {!loading && !error && shop && (
             <ShopBanner
               category={category}
