@@ -118,7 +118,7 @@ export interface Shop {
  */
 export interface ShopResponse {
   item: Shop;
-  links?: any[];
+  links?: ApiLink[];
 }
 /**
  * 공고
