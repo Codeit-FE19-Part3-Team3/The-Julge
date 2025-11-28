@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import notices from '@/api/owner/notice';
-import { NoticeItem, Shop } from '@/api/types';
+import { ApplicationItem, NoticeItem, Shop } from '@/api/types';
+import Table from '@/components/common/Table';
 import PostBanner from '@/components/owner/PostBanner';
+import { transformApplicationData } from '@/lib/utils/transformTableData';
 
 const NoticeDetail = () => {
   const router = useRouter();
@@ -13,8 +15,10 @@ const NoticeDetail = () => {
 
   const [notice, setNotice] = useState<NoticeItem | null>(null);
   const [shop, setShop] = useState<Shop | null>(null);
+  const [applications, setApplications] = useState<ApplicationItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [_actionLoading, setActionLoading] = useState<string | null>(null);
+
   const allowedCategories = [
     '한식',
     '중식',
@@ -37,27 +41,89 @@ const NoticeDetail = () => {
     const fetchNotice = async () => {
       try {
         // 1. 공고 상세 조회
-        const res = await notices.getNotice(noticeId as string);
-        const noticeData = res.item;
+        const noticeRes = await notices.getNotice(noticeId as string);
+        const noticeData = noticeRes.item;
         setNotice(noticeData);
 
+        console.log(noticeData);
         // 2. 관련 가게 정보
         if (noticeData.shop?.item) {
           setShop(noticeData.shop.item);
         }
-      } catch (err: any) {
-        console.error(err);
-        setError('공고 정보를 불러오는 중 오류가 발생했습니다.');
+        // 3) 지원자 목록 조회 (shop_id 필요!)
+        const shopId = noticeData.shop.item.id;
+        const applicationsRes = await notices.getApplications(
+          shopId,
+          noticeId as string,
+          0,
+          20
+        );
+        const employerApiData = applicationsRes.items.map((a) => a.item);
+
+        setApplications(employerApiData);
       } finally {
         setLoading(false);
       }
     };
-
     fetchNotice();
   }, [noticeId]);
 
+  // 승인 처리
+  const handleApprove = async (applicationId: string) => {
+    if (!shop?.id || !noticeId) return;
+
+    setActionLoading(applicationId);
+
+    try {
+      // 승인 API 호출
+      await notices.approveApplication(
+        shop.id,
+        noticeId as string,
+        applicationId
+      );
+
+      // 상태 업데이트: 해당 지원의 status를 'accepted'로 변경
+      setApplications((prevApps) =>
+        prevApps.map((app) =>
+          app.id === applicationId ? { ...app, status: 'accepted' } : app
+        )
+      );
+
+      alert('지원을 승인했습니다.');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  // 거절 처리
+  const handleReject = async (applicationId: string) => {
+    if (!shop?.id || !noticeId) return;
+
+    setActionLoading(applicationId);
+
+    try {
+      // 거절 API 호출
+      await notices.rejectApplication(
+        shop.id,
+        noticeId as string,
+        applicationId
+      );
+
+      // 상태 업데이트: 해당 지원의 status를 'rejected'로 변경
+      setApplications((prevApps) =>
+        prevApps.map((app) =>
+          app.id === applicationId ? { ...app, status: 'rejected' } : app
+        )
+      );
+
+      alert('지원을 거절했습니다.');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   if (loading) return <div className="p-6">로딩 중...</div>;
-  if (error) return <div className="p-6 text-red-500">{error}</div>;
+
   if (!notice) return <div className="p-6">공고를 찾을 수 없습니다.</div>;
 
   return (
@@ -73,6 +139,7 @@ const NoticeDetail = () => {
             </div>
             <div className="mb-8">
               <PostBanner
+                name=""
                 location={shop.address1}
                 imageUrl={shop.imageUrl}
                 description={shop.description}
@@ -97,7 +164,17 @@ const NoticeDetail = () => {
               <div className="mb-2 text-[18px] font-semibold max-[375px]:text-[16px]">
                 신청자 목록
               </div>
-              <div>{/* 신청자 목록 테이블 */}</div>
+              <div>
+                <Table
+                  data={transformApplicationData(applications).map((item) => ({
+                    ...item,
+                    status: item.status === 'pending' ? '' : item.status,
+                  }))}
+                  rowKey="id"
+                  onApprove={handleApprove}
+                  onReject={handleReject}
+                />
+              </div>
             </div>
           </>
         )}
