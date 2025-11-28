@@ -50,6 +50,10 @@ export interface User {
   phone?: string;
   address?: string;
   bio?: string;
+  shop?: {
+    item: Shop;
+  } | null;
+  links?: ApiLink[];
 }
 
 /**
@@ -89,4 +93,107 @@ export interface LoginResponse {
     };
   };
   links: ApiLink[];
+}
+
+/**
+ * 가게
+ */
+export interface Shop {
+  id: string;
+  name: string;
+  category: string;
+  address1: string;
+  address2: string;
+  description: string;
+  imageUrl: string;
+  originalHourlyPay: number;
+  user?: {
+    item: User;
+    href: string;
+  };
+}
+/**
+ * Shop이 item으로 감싸져서 반환될 때
+ */
+export interface ShopResponse {
+  item: Shop;
+  links?: ApiLink[];
+}
+/**
+ * 공고
+ */
+
+/** 가게 공고 정보 */
+export interface NoticeItem {
+  shop: { item: Shop };
+  id: string;
+  hourlyPay: number;
+  startsAt: string;
+  workhour: number;
+  description: string;
+  closed: boolean;
+}
+
+export interface Notice {
+  item: NoticeItem;
+  links?: ApiLink[];
+}
+
+export interface NoticeListResponse {
+  offset: number;
+  limit: number;
+  count: number;
+  hasNext: boolean;
+  items: Notice[];
+  links?: ApiLink[];
+}
+
+/**
+ * 지원자(신청자) 항목
+ */
+export interface ApplicationUser {
+  id: string;
+  email: string;
+  type: 'employer' | 'employee';
+  name?: string;
+  phone?: string;
+  address?: string;
+  bio?: string;
+}
+
+/**
+ * 특정 공고 지원 정보
+ */
+export interface ApplicationItem {
+  id: string;
+  status: 'pending' | 'accepted' | 'rejected' | 'canceled';
+  createdAt: string;
+
+  user: {
+    item: ApplicationUser;
+    href: string;
+  };
+
+  shop: {
+    item: Shop;
+    href: string;
+  };
+
+  notice: {
+    item: NoticeItem;
+    href: string;
+  };
+}
+
+/**
+ * 지원 목록 응답
+ */
+export interface ApplicationListResponse {
+  offset: number;
+  limit: number;
+  count: number;
+  hasNext: boolean;
+  items: {
+    item: ApplicationItem;
+  }[];
 }
