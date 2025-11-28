@@ -18,7 +18,7 @@ const users = {
   },
   // 특정 유저 정보 조회
   getUser: async (user_id: string) => {
-    return await api.get<User>(`/users/${user_id}`);
+    return await api.get<{ item: User }>(`/users/${user_id}`);
   },
 };
 
