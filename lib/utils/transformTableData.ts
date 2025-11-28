@@ -37,7 +37,7 @@ interface EmployeeApiItem {
 }
 
 // 사장님: 테이블 데이터 타입 정의
-export interface EmployerTableData extends Record<string, string> {
+export interface EmployerTableData extends Record<string, React.ReactNode> {
   id: string;
   name: string;
   bio: string;
@@ -46,7 +46,7 @@ export interface EmployerTableData extends Record<string, string> {
 }
 
 // 알바님: 테이블 데이터 타입 정의
-export interface EmployeeTableData extends Record<string, string> {
+export interface EmployeeTableData extends Record<string, React.ReactNode> {
   id: string;
   shop: string;
   workhour: string;
