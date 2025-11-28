@@ -14,7 +14,7 @@ interface StoreInfo {
   imageUrl: string;
   isActive?: boolean;
   percentage?: number;
-  className?: string; // 이 줄을 추가합니다.
+  className?: string;
 }
 
 const Post = ({
@@ -35,9 +35,9 @@ const Post = ({
   });
 
   return (
-    <div className={`${postClasses.container()} ${className || ''}`}>
+    <div className={postClasses.container({ className })}>
       {/* 이미지 + 오버레이 */}
-      <div className="h-[84px] max-w-[280px] sm:h-[160px]">
+      <div className="h-[84px] overflow-hidden rounded-[12px] sm:h-[160px]">
         <PostImage
           imageUrl={imageUrl}
           name={name}
