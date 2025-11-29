@@ -6,9 +6,10 @@ import {
   ShopNoticeResponse,
   ShopNoticeDetailResponse,
   NoticeRequest,
+  ShopNoticesResponse,
 } from '../types';
 
-const notices = {
+const noticesApi = {
   // 공고 조회
   getNotices: async (query?: GetNoticesQuery) => {
     return api.get<NoticeResponse>('/notices', {
@@ -18,7 +19,7 @@ const notices = {
 
   // 가게의 공고 목록 조회
   getShopNoticeList: async (shop_id: string, query?: GetShopNoticesQuery) => {
-    return api.get<GetShopNoticesQuery>(`/shops/${shop_id}/notices`, {
+    return api.get<ShopNoticesResponse>(`/shops/${shop_id}/notices`, {
       params: query,
     });
   },
@@ -36,4 +37,4 @@ const notices = {
   },
 };
 
-export default notices;
+export default noticesApi;

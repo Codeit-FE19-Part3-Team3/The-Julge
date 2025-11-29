@@ -1,21 +1,23 @@
 // pages/owner/notice/[noticeId].tsx
 import { useEffect, useState } from 'react';
-
 import { useRouter } from 'next/router';
 
 import notices from '@/api/owner/notice';
-import { ApplicationItem, NoticeItem, Shop } from '@/api/types';
+import applications from '@/api/owner/application';
+import { ApplicationItem, NoticeRequest, ShopRequest } from '@/api/types';
 import Table from '@/components/common/Table';
 import PostBanner from '@/components/owner/PostBanner';
 import { transformApplicationData } from '@/lib/utils/transformTableData';
 
 const NoticeDetail = () => {
   const router = useRouter();
-  const { noticeId } = router.query;
+  const { noticeId, shopId } = router.query;
 
-  const [notice, setNotice] = useState<NoticeItem | null>(null);
-  const [shop, setShop] = useState<Shop | null>(null);
-  const [applications, setApplications] = useState<ApplicationItem[]>([]);
+  const [notice, setNotice] = useState<
+    (NoticeRequest & { id: string; closed: boolean }) | null
+  >(null);
+  const [shop, setShop] = useState<(ShopRequest & { id: string }) | null>(null);
+  const [applicationList, setApplicationList] = useState<ApplicationItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [_actionLoading, setActionLoading] = useState<string | null>(null);
 
@@ -36,34 +38,57 @@ const NoticeDetail = () => {
       : '기타';
 
   useEffect(() => {
-    if (!noticeId) return;
+    if (!noticeId || !shopId) return;
+
     const fetchNotice = async () => {
       try {
+        // setLoading(true);
+
         // 1. 공고 상세 조회
-        const noticeRes = await notices.getNotice(noticeId as string);
+        const noticeRes = await notices.getShopNotice(
+          shopId as string,
+          noticeId as string
+        );
+
         const noticeData = noticeRes.item;
-        setNotice(noticeData);
+        setNotice({
+          id: noticeData.id,
+          hourlyPay: noticeData.hourlyPay,
+          startsAt: noticeData.startsAt,
+          workhour: noticeData.workhour,
+          description: noticeData.description,
+          closed: noticeData.closed,
+        });
 
         const shopItem = noticeData.shop?.item;
         if (shopItem) {
           setShop(shopItem);
-          // 3) 지원자 목록 조회 (shop_id 필요!)
-          const applicationsRes = await notices.getApplications(
+
+          // 2. 지원자 목록 조회
+          const applicationsRes = await applications.getApplications(
             shopItem.id,
             noticeId as string,
-            0,
-            20
+            {
+              offset: 0,
+              limit: 20,
+            }
           );
-          const employerApiData = applicationsRes.items.map((a) => a.item);
 
-          setApplications(employerApiData);
+          const applicationItems = applicationsRes.items.map(
+            (item) => item.item
+          );
+          setApplicationList(applicationItems);
         }
+      } catch (error) {
+        console.error('공고 조회 실패:', error);
+        alert('공고를 불러오는데 실패했습니다.');
       } finally {
         setLoading(false);
       }
     };
+
     fetchNotice();
-  }, [noticeId]);
+  }, [noticeId, shopId]);
 
   // 승인 처리
   const handleApprove = async (applicationId: string) => {
@@ -72,21 +97,26 @@ const NoticeDetail = () => {
     setActionLoading(applicationId);
 
     try {
-      // 승인 API 호출
-      await notices.approveApplication(
+      await applications.updateApplicationStatus(
         shop.id,
         noticeId as string,
-        applicationId
+        applicationId,
+        { status: 'accepted' }
       );
 
-      // 상태 업데이트: 해당 지원의 status를 'accepted'로 변경
-      setApplications((prevApps) =>
+      // 상태 업데이트
+      setApplicationList((prevApps) =>
         prevApps.map((app) =>
-          app.id === applicationId ? { ...app, status: 'accepted' } : app
+          app.id === applicationId
+            ? { ...app, status: 'accepted' as const }
+            : app
         )
       );
 
       alert('지원을 승인했습니다.');
+    } catch (error) {
+      console.error('승인 실패:', error);
+      alert('승인에 실패했습니다.');
     } finally {
       setActionLoading(null);
     }
@@ -99,27 +129,30 @@ const NoticeDetail = () => {
     setActionLoading(applicationId);
 
     try {
-      // 거절 API 호출
-      await notices.rejectApplication(
+      await applications.updateApplicationStatus(
         shop.id,
         noticeId as string,
-        applicationId
+        applicationId,
+        { status: 'rejected' }
       );
 
-      // 상태 업데이트: 해당 지원의 status를 'rejected'로 변경
-      setApplications((prevApps) =>
+      // 상태 업데이트
+      setApplicationList((prevApps) =>
         prevApps.map((app) =>
-          app.id === applicationId ? { ...app, status: 'rejected' } : app
+          app.id === applicationId
+            ? { ...app, status: 'rejected' as const }
+            : app
         )
       );
 
       alert('지원을 거절했습니다.');
+    } catch (error) {
+      console.error('거절 실패:', error);
+      alert('거절에 실패했습니다.');
     } finally {
       setActionLoading(null);
     }
   };
-
-  if (loading) return <div className="p-6">로딩 중...</div>;
 
   if (!notice) return <div className="p-6">공고를 찾을 수 없습니다.</div>;
 
@@ -136,7 +169,7 @@ const NoticeDetail = () => {
             </div>
             <div className="mb-8">
               <PostBanner
-                name=""
+                name={shop.name}
                 location={shop.address1}
                 imageUrl={shop.imageUrl}
                 description={shop.description}
@@ -163,10 +196,12 @@ const NoticeDetail = () => {
               </div>
               <div>
                 <Table
-                  data={transformApplicationData(applications).map((item) => ({
-                    ...item,
-                    status: item.status === 'pending' ? '' : item.status,
-                  }))}
+                  data={transformApplicationData(applicationList).map(
+                    (item) => ({
+                      ...item,
+                      status: item.status === 'pending' ? '' : item.status,
+                    })
+                  )}
                   rowKey="id"
                   onApprove={handleApprove}
                   onReject={handleReject}

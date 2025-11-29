@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 
 import shops from '@/api/owner/shop';
-import { NoticeItem, Shop } from '@/api/types';
+import { ShopRequest, NoticeRequest } from '@/api/types';
 import users from '@/api/users';
 import Button from '@/components/common/Button';
 import ShopBanner from '@/components/owner/ShopBanner';
 import Post from '@/components/post/Post';
+import noticesApi from '@/api/owner/notice';
 
 const MyShop = () => {
-  const [shop, setShop] = useState<Shop | null>(null);
+  const [shop, setShop] = useState<({ id: string } & ShopRequest) | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [notices, setNotices] = useState<NoticeItem[]>([]);
+
+  type ShopNoticeItem = { id: string } & NoticeRequest & { closed: boolean };
+  const [notices, setNotices] = useState<ShopNoticeItem[]>([]);
   const allowedCategories = [
     '한식',
     '중식',
@@ -23,19 +26,23 @@ const MyShop = () => {
     '기타',
   ] as const;
 
-  const category =
-    shop && allowedCategories.includes(shop.category as any)
-      ? (shop.category as (typeof allowedCategories)[number])
+  type Category = (typeof allowedCategories)[number];
+
+  const category: Category =
+    shop && allowedCategories.includes(shop.category as Category)
+      ? (shop.category as Category)
       : '기타';
+
   useEffect(() => {
     const fetchShopAndNotices = async () => {
       try {
         const userId = localStorage.getItem('userId');
+        // const userId = 'cfe001f7-5085-4fa9-bb0a-506ed86ebfd7'; 테스트 코드
         if (!userId) {
           setError('로그인이 필요합니다.');
           return;
         }
-
+        // 가게 유무
         const userRes = await users.getUser(userId);
         const user = userRes?.item;
         const shopItem = user?.shop?.item;
@@ -43,7 +50,7 @@ const MyShop = () => {
           setError('유저의 가게 정보가 없습니다.');
           return;
         }
-
+        // 가게 정보 유무
         const shopId = shopItem.id;
         const shopRes = await shops.getShop(shopId);
         const shopData = shopRes?.item;
@@ -53,12 +60,11 @@ const MyShop = () => {
         }
         setShop(shopData);
 
-        const noticeRes = await shops.getNotices(shopId);
-        const noticeItems: NoticeItem[] = noticeRes.items.map((n) => n.item);
+        const noticeRes = await noticesApi.getShopNoticeList(shopId);
+
+        const noticeItems = noticeRes.items.map((n) => n.item);
+
         setNotices(noticeItems);
-      } catch (err: any) {
-        console.error(err);
-        setError('데이터를 불러오는 중 오류가 발생했습니다.');
       } finally {
         setLoading(false);
       }
@@ -107,7 +113,7 @@ const MyShop = () => {
             </h2>
 
             {!loading && !error && notices && (
-              <div className="flex flex-col gap-6">
+              <div className="grid grid-cols-3 gap-6 max-[744px]:grid-cols-2 max-[375px]:grid-cols-1">
                 {notices.length > 0 ? (
                   notices.map((notice) => (
                     <Post

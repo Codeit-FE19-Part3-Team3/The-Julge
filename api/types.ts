@@ -149,6 +149,7 @@ export interface ShopResponse {
   };
   links?: ApiLink[];
 }
+
 /**
  * 공고
  */
