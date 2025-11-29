@@ -52,6 +52,10 @@ export interface User {
   bio?: string;
   shop?: { item: { id: string } & ShopRequest };
 }
+export interface UserInfo {
+  item: User;
+  links: ApiLink[];
+}
 
 /**
  * 회원가입 요청 타입
