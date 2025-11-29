@@ -50,10 +50,6 @@ export interface User {
   phone?: string;
   address?: string;
   bio?: string;
-  shop?: {
-    item: Shop;
-  } | null;
-  links?: ApiLink[];
 }
 
 /**
@@ -98,102 +94,198 @@ export interface LoginResponse {
 /**
  * 가게
  */
-export interface Shop {
-  id: string;
+export interface ShopRequest {
   name: string;
-  category: string;
-  address1: string;
+  category:
+    | '한식'
+    | '중식'
+    | '일식'
+    | '양식'
+    | '분식'
+    | '카페'
+    | '편의점'
+    | '기타';
+  address1:
+    | '서울시 종로구'
+    | '서울시 중구'
+    | '서울시 용산구'
+    | '서울시 성동구'
+    | '서울시 광진구'
+    | '서울시 동대문구'
+    | '서울시 중랑구'
+    | '서울시 성북구'
+    | '서울시 강북구'
+    | '서울시 도봉구'
+    | '서울시 노원구'
+    | '서울시 은평구'
+    | '서울시 서대문구'
+    | '서울시 마포구'
+    | '서울시 양천구'
+    | '서울시 강서구'
+    | '서울시 구로구'
+    | '서울시 금천구'
+    | '서울시 영등포구'
+    | '서울시 동작구'
+    | '서울시 관악구'
+    | '서울시 서초구'
+    | '서울시 강남구'
+    | '서울시 송파구'
+    | '서울시 강동구';
   address2: string;
   description: string;
   imageUrl: string;
   originalHourlyPay: number;
-  user?: {
-    item: User;
-    href: string;
-  };
 }
-/**
- * Shop이 item으로 감싸져서 반환될 때
- */
+
 export interface ShopResponse {
-  item: Shop;
+  item: { id: string } & ShopRequest;
+  user: {
+    item: User;
+    href: 'string';
+  };
   links?: ApiLink[];
 }
 /**
  * 공고
  */
 
-/** 가게 공고 정보 */
-export interface NoticeItem {
-  shop: { item: Shop };
-  id: string;
+/**
+ * 공고 조회
+ */
+export interface GetNoticesQuery {
+  offset?: number; // 조회 시작 기준
+  limit?: number; // 조회 개수
+  address?: string; // 위치 설정
+  keyword?: string; // 검색어 설정
+  startsAtGte?: string; // 시작 시점, RFC 3339 형식
+  hourlyPayGte?: number; // 금액 설정
+  sort?: 'time' | 'pay' | 'hour' | 'shop'; // 정렬 기준
+}
+export interface NoticeRequest {
   hourlyPay: number;
-  startsAt: string;
+  startsAt: string; // 양식: 2023-12-23T00:00:00Z
   workhour: number;
   description: string;
-  closed: boolean;
 }
-
-export interface Notice {
-  item: NoticeItem;
-  links?: ApiLink[];
-}
-
-export interface NoticeListResponse {
+export interface NoticeResponse {
   offset: number;
   limit: number;
-  count: number;
-  hasNext: boolean;
-  items: Notice[];
+  count: number; // 전체 개수
+  hasNext: boolean; // 다음 내용 존재 여부
+  address: string[];
+  keyword?: string;
+  items: {
+    item: { id: string } & NoticeRequest & {
+        shop: { item: ShopRequest; href: string };
+      };
+    links?: ApiLink[];
+  }[];
   links?: ApiLink[];
 }
 
 /**
- * 지원자(신청자) 항목
+ * 가게의 공고 목록 조회
  */
-export interface ApplicationUser {
-  id: string;
-  email: string;
-  type: 'employer' | 'employee';
-  name?: string;
-  phone?: string;
-  address?: string;
-  bio?: string;
+export interface GetShopNoticesQuery {
+  offset?: number; // 조회 시작 기준
+  limit?: number; // 조회 개수
+}
+export interface ShopNoticesResponse {
+  offset: number;
+  limit: number;
+  count: number; // 전체 개수
+  hasNext: boolean; // 다음 내용 존재 여부
+  items: {
+    item: { id: string } & NoticeRequest & { closed: boolean };
+    links: ApiLink[];
+  }[];
+  links: ApiLink[];
 }
 
 /**
- * 특정 공고 지원 정보
+ * 가게의 공고 등록
  */
+
+export interface ShopNoticeResponse {
+  item: {
+    id: string;
+    closed: boolean;
+    shop: {
+      item: { id: string } & ShopRequest;
+      href: string;
+    };
+  } & NoticeRequest;
+  links: ApiLink[];
+}
+
+/**
+ *  가게의 특정 공고 조회
+ */
+export interface ShopNoticeDetailResponse {
+  item: { id: string } & NoticeRequest & { closed: boolean } & {
+      shop: { item: { id: string } & ShopRequest } & { href: string };
+      currentUserApplication: {
+        item: {
+          id: string;
+          status: 'pending' | 'accepted' | 'rejected' | 'canceled'; // application.status
+          createdAt: string; // application.createdAt
+        };
+      };
+    };
+  links: ApiLink[];
+}
+
+/**
+ * 가게의 특정 공고의 지원 목록 조회
+ */
+
+export interface GetApplicationsQuery {
+  offset?: number; // 조회 시작 기준
+  limit?: number; // 조회 개수
+}
+
 export interface ApplicationItem {
   id: string;
   status: 'pending' | 'accepted' | 'rejected' | 'canceled';
   createdAt: string;
-
   user: {
-    item: ApplicationUser;
+    item: User;
     href: string;
   };
-
   shop: {
-    item: Shop;
+    item: { id: string } & ShopRequest;
     href: string;
   };
-
   notice: {
-    item: NoticeItem;
+    item: { id: string } & NoticeRequest & { closed: boolean };
     href: string;
   };
 }
 
 /**
- * 지원 목록 응답
+ *  유저의 지원 목록
  */
-export interface ApplicationListResponse {
+
+export interface ApplicationsResponse {
   offset: number;
   limit: number;
-  count: number;
-  hasNext: boolean;
+  count: number; // 전체 개수
+  hasNext: boolean; // 다음 내용 존재 여부
   items: {
     item: ApplicationItem;
+    links: ApiLink[];
   }[];
+  links: ApiLink[];
+}
+
+/**
+ * 가게의 특정 공고 지원 승인, 거절 또는 취소
+ */
+export interface UpdateApplicationRequest {
+  status: 'accepted' | 'rejected' | 'canceled';
+}
+
+export interface UpdateApplicationResponse {
+  item: ApplicationItem;
+  links: ApiLink[];
 }

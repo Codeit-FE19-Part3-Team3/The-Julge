@@ -1,49 +1,37 @@
 import { api } from '../client';
-import { ApplicationListResponse, Notice } from '../types';
+import {
+  GetNoticesQuery,
+  GetShopNoticesQuery,
+  NoticeResponse,
+  ShopNoticeResponse,
+  ShopNoticeDetailResponse,
+  NoticeRequest,
+} from '../types';
 
 const notices = {
-  // 1) 공고 등록
-  register: async (data: Omit<Notice, 'id'>) => {
-    return api.post<Notice>('/notices', data);
+  // 공고 조회
+  getNotices: async (query?: GetNoticesQuery) => {
+    return api.get<NoticeResponse>('/notices', {
+      params: query,
+    });
   },
 
-  // 2) 공고 조회
-  getNotice: async (notice_id: string) => {
-    return api.get<Notice>(`/notices/${notice_id}`);
+  // 가게의 공고 목록 조회
+  getShopNoticeList: async (shop_id: string, query?: GetShopNoticesQuery) => {
+    return api.get<GetShopNoticesQuery>(`/shops/${shop_id}/notices`, {
+      params: query,
+    });
   },
 
-  // 3) 공고 리스트 조회
-  getNotices: async () => {
-    return api.get<Notice[]>('/notices');
+  // 가게 공고 등록
+  postShopNotice: async (shop_id: string, data: NoticeRequest) => {
+    return api.post<ShopNoticeResponse>(`/shops/${shop_id}/notices`, data);
   },
 
-  // 4) 공고 지원자 목록 조회
-  getApplications: async (
-    shop_id: string,
-    notice_id: string,
-    offset?: number,
-    limit?: number
-  ) => {
-    return api.get<ApplicationListResponse>(
-      `/shops/${shop_id}/notices/${notice_id}/applications`,
-      {
-        params: { offset, limit },
-      }
-    );
-  },
-
-  // 5) 지원 상태 변경
-  updateApplicationStatus: async (
-    shop_id: string,
-    notice_id: string,
-    application_id: string,
-    status: 'accepted' | 'rejected'
-  ) => {
-    return api.put(
-      `/shops/${shop_id}/notices/${notice_id}/applications/${application_id}`,
-      {
-        status,
-      }
+  // 가게의 특정 공고 조회
+  getShopNotice: async (shop_id: string, notice_id: string) => {
+    return api.post<ShopNoticeDetailResponse>(
+      `/shops/${shop_id}/notices/${notice_id}`
     );
   },
 };
