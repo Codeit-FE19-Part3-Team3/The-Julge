@@ -44,11 +44,8 @@ const TEXT_BUTTON_STYLE =
 const Header = () => {
   const router = useRouter();
 
-  const { clearAuth } = useAuthStore();
-  const isAuthenticated = true;
-  //const { isAuthenticated, clearAuth } = useAuthStore();
-  const isEmployer = true;
-  useIsEmployer();
+  const { isAuthenticated, clearAuth } = useAuthStore();
+  const isEmployer = useIsEmployer();
   const isEmployee = useIsEmployee();
 
   // 사용자 역할 결정
