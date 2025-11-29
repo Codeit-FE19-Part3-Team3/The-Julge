@@ -27,6 +27,38 @@ const SNS_ICON_SIZE = {
 const SNS_LINK_CLASS =
   'inline-flex justify-center items-center w-[25px] h-[25px]';
 
+// SNS 링크 정보 타입 정의
+type SnsLinkItem = {
+  href: string;
+  alt: string;
+  icon: string;
+  target?: string;
+  rel?: string;
+};
+
+// SNS 링크 목록 상수
+const SNS_LINKS: SnsLinkItem[] = [
+  {
+    href: 'mailto:support@codeit.kr?subject=문의사항&body=안녕하세요',
+    alt: '이메일',
+    icon: '/images/email.svg',
+  },
+  {
+    href: 'https://www.facebook.com/codeit.kr/',
+    alt: '페이스북',
+    icon: '/images/facebook.svg',
+    target: '_blank',
+    rel: 'noopener noreferrer',
+  },
+  {
+    href: 'https://www.instagram.com/codeit_kr/',
+    alt: '인스타그램',
+    icon: '/images/instagram.svg',
+    target: '_blank',
+    rel: 'noopener noreferrer',
+  },
+];
+
 const Footer = () => {
   return (
     <footer className="bg-gray-10 w-full text-gray-50">
@@ -53,40 +85,21 @@ const Footer = () => {
 
         {/* SNS 링크 네비게이션 (이메일, 페이스북, 인스타그램) */}
         <nav className="flex justify-end gap-2.5">
-          <a
-            href="mailto:support@codeit.kr?subject=문의사항&body=안녕하세요"
-            className={SNS_LINK_CLASS}>
-            <Image
-              src="/images/email.svg"
-              alt="이메일"
-              width={SNS_ICON_SIZE.width}
-              height={SNS_ICON_SIZE.height}
-            />
-          </a>
-          <a
-            href="https://www.facebook.com/codeit.kr/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={SNS_LINK_CLASS}>
-            <Image
-              src="/images/facebook.svg"
-              alt="페이스북"
-              width={SNS_ICON_SIZE.width}
-              height={SNS_ICON_SIZE.height}
-            />
-          </a>
-          <a
-            href="https://www.instagram.com/codeit_kr/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={SNS_LINK_CLASS}>
-            <Image
-              src="/images/instagram.svg"
-              alt="인스타그램"
-              width={SNS_ICON_SIZE.width}
-              height={SNS_ICON_SIZE.height}
-            />
-          </a>
+          {SNS_LINKS.map((link) => (
+            <a
+              key={link.alt}
+              href={link.href}
+              target={link.target}
+              rel={link.rel}
+              className={SNS_LINK_CLASS}>
+              <Image
+                src={link.icon}
+                alt={link.alt}
+                width={SNS_ICON_SIZE.width}
+                height={SNS_ICON_SIZE.height}
+              />
+            </a>
+          ))}
         </nav>
       </div>
     </footer>
