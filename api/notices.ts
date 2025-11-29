@@ -72,7 +72,7 @@ export async function fetchNoticeList(params: FetchNoticeListParams = {}) {
     queryParams.append('startsAtGte', startsAtGte);
   }
 
-  if (hourlyPayGte) {
+  if (hourlyPayGte != null) {
     queryParams.append('hourlyPayGte', hourlyPayGte.toString());
   }
 

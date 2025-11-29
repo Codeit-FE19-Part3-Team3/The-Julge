@@ -53,6 +53,24 @@ const NoticeListPage = () => {
   const [customNotices, setCustomNotices] = useState<TransformedNotice[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  //필터 파라미터 구성 로직
+  const buildFilterParams = useCallback(
+    (filters: FilterValues): Partial<FetchNoticeListParams> => {
+      const params: Partial<FetchNoticeListParams> = {};
+      if (filters.locations.length > 0) {
+        params.address = filters.locations;
+      }
+      if (filters.startDate) {
+        params.startsAtGte = new Date(filters.startDate).toISOString();
+      }
+      if (filters.amount) {
+        params.hourlyPayGte = parseInt(filters.amount, 10);
+      }
+      return params;
+    },
+    []
+  );
+
   // 검색어 정규화
   const searchTerm = useMemo(() => {
     if (!rawSearch) return '';
@@ -163,25 +181,13 @@ const NoticeListPage = () => {
     setIsLoading(true);
     try {
       // API 파라미터 구성
-      const params: FetchNoticeListParams = {
+      const baseParams: FetchNoticeListParams = {
         offset: (allPage - 1) * ITEMS_PER_PAGE,
         limit: ITEMS_PER_PAGE,
       };
 
-      // 지역 필터
-      if (filterValues.locations.length > 0) {
-        params.address = filterValues.locations;
-      }
-
-      // 시작일 필터
-      if (filterValues.startDate) {
-        params.startsAtGte = new Date(filterValues.startDate).toISOString();
-      }
-
-      // 최소 시급 필터
-      if (filterValues.amount) {
-        params.hourlyPayGte = parseInt(filterValues.amount, 10);
-      }
+      const filterParams = buildFilterParams(filterValues);
+      const params: FetchNoticeListParams = { ...baseParams, ...filterParams };
 
       const data = await fetchNoticeList(params);
 
@@ -201,7 +207,7 @@ const NoticeListPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [allPage, filterValues, sortType, sortNotices]);
+  }, [allPage, filterValues, sortType, sortNotices, buildFilterParams]);
 
   // 검색 결과 불러오기
   const loadSearchResults = useCallback(async () => {
@@ -212,26 +218,14 @@ const NoticeListPage = () => {
 
     setIsLoading(true);
     try {
-      const params: FetchNoticeListParams = {
+      const baseParams: FetchNoticeListParams = {
         offset: (searchPage - 1) * ITEMS_PER_PAGE,
         limit: ITEMS_PER_PAGE,
         keyword: searchTerm,
       };
 
-      // 지역 필터
-      if (filterValues.locations.length > 0) {
-        params.address = filterValues.locations;
-      }
-
-      // 시작일 필터
-      if (filterValues.startDate) {
-        params.startsAtGte = new Date(filterValues.startDate).toISOString();
-      }
-
-      // 최소 시급 필터
-      if (filterValues.amount) {
-        params.hourlyPayGte = parseInt(filterValues.amount, 10);
-      }
+      const filterParams = buildFilterParams(filterValues);
+      const params: FetchNoticeListParams = { ...baseParams, ...filterParams };
 
       const data = await fetchNoticeList(params);
 
@@ -251,7 +245,14 @@ const NoticeListPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [searchTerm, searchPage, filterValues, sortType, sortNotices]);
+  }, [
+    searchTerm,
+    searchPage,
+    filterValues,
+    sortType,
+    sortNotices,
+    buildFilterParams,
+  ]);
 
   // 필터 변경 시 페이지 리셋
   useEffect(() => {
