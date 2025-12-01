@@ -1,9 +1,10 @@
 // pages/owner/notice/[noticeId].tsx
 import { useEffect, useState } from 'react';
+
 import { useRouter } from 'next/router';
 
-import notices from '@/api/owner/notice';
 import applications from '@/api/owner/application';
+import notices from '@/api/owner/notice';
 import { ApplicationItem, NoticeRequest, ShopRequest } from '@/api/types';
 import Table from '@/components/common/Table';
 import PostBanner from '@/components/owner/PostBanner';
@@ -12,13 +13,12 @@ import { transformApplicationData } from '@/lib/utils/transformTableData';
 const NoticeDetail = () => {
   const router = useRouter();
   const { noticeId, shopId } = router.query;
-
   const [notice, setNotice] = useState<
     (NoticeRequest & { id: string; closed: boolean }) | null
   >(null);
   const [shop, setShop] = useState<(ShopRequest & { id: string }) | null>(null);
   const [applicationList, setApplicationList] = useState<ApplicationItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const [_actionLoading, setActionLoading] = useState<string | null>(null);
 
   const allowedCategories = [
@@ -42,7 +42,7 @@ const NoticeDetail = () => {
 
     const fetchNotice = async () => {
       try {
-        // setLoading(true);
+        setLoading(true);
 
         // 1. 공고 상세 조회
         const noticeRes = await notices.getShopNotice(
@@ -77,6 +77,7 @@ const NoticeDetail = () => {
           const applicationItems = applicationsRes.items.map(
             (item) => item.item
           );
+          console.log('applicationItems:', applicationItems); // 추가
           setApplicationList(applicationItems);
         }
       } catch (error) {
