@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -24,8 +24,14 @@ const Register = () => {
   const { isAuthenticated } = useAuthRedirect('/login');
 
   // 프로필 form 로직
-  const { formData, isLoading, hasFormChanged, handleChange, handleSubmit } =
-    useProfileRegisterForm();
+  const {
+    formData,
+    isLoading,
+    fetchError,
+    hasFormChanged,
+    handleChange,
+    handleSubmit,
+  } = useProfileRegisterForm();
 
   // Modal 상태
   const [errorModal, setErrorModal] = useState({ isOpen: false, message: '' });
@@ -90,6 +96,13 @@ const Register = () => {
   const onSubmit = () => {
     handleSubmit(openSuccessModal, openErrorModal);
   };
+
+  useEffect(() => {
+    if (fetchError) {
+      // 프로필 로딩 실패 에러 메시지가 있을 경우 ErrorModal 표시
+      openErrorModal(fetchError);
+    }
+  }, [fetchError]);
 
   if (!isAuthenticated) {
     return null;
@@ -233,7 +246,7 @@ const Register = () => {
       {/* 확인 Modal */}
       <ConfirmModal
         isOpen={confirmModal}
-        message="변경된 내용이 저장되지 않습니다."
+        message="변경된 내용이 저장되지 않습니다.<br>페이지를 이동하시겠습니까?"
         onConfirm={confirmLeave}
         onCancel={() => setConfirmModal(false)}
       />

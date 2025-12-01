@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { isAxiosError } from 'axios';
 
@@ -89,6 +89,9 @@ export const useProfileRegisterForm = () => {
   // 로딩 상태 관리
   const [isLoading, setIsLoading] = useState(false);
 
+  // 프로필 정보 로딩 실패 시 에러 메시지
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
   // 전역 상태에서 현재 로그인한 사용자 정보 가져오기
   const user = useAuthStore((state) => state.user);
 
@@ -99,6 +102,7 @@ export const useProfileRegisterForm = () => {
       if (user?.id) {
         try {
           setIsLoading(true);
+          setFetchError(null); // 재시도 시 이전 에러 초기화
 
           // API를 통해 사용자 정보 조회
           const response = await users.getUser(user.id);
@@ -117,6 +121,8 @@ export const useProfileRegisterForm = () => {
           setInitialData(profileData);
         } catch (error) {
           console.error('사용자 정보 조회 실패:', error);
+          // 사용자에게 표시할 에러 메시지 설정
+          setFetchError(MODAL_MESSAGES.FETCH_ERROR);
         } finally {
           setIsLoading(false);
         }
@@ -128,16 +134,16 @@ export const useProfileRegisterForm = () => {
 
   /**
    * form 데이터가 초기 데이터와 비교하여 변경되었는지 확인
-   * @returns 변경 여부 (boolean)
+   * useMemo를 사용하여 formData나 initialData가 변경될 때만 재계산
    */
-  const hasFormChanged = () => {
+  const hasFormChanged = useMemo(() => {
     return (
       formData.name !== initialData.name ||
       formData.phone !== initialData.phone ||
       formData.address !== initialData.address ||
       formData.bio !== initialData.bio
     );
-  };
+  }, [formData, initialData]);
 
   /**
    * 입력 필드 변경 이벤트 핸들러
@@ -208,7 +214,8 @@ export const useProfileRegisterForm = () => {
   return {
     formData, // 현재 form 데이터
     isLoading, // 로딩 상태
-    hasFormChanged: hasFormChanged(), // form 변경 여부
+    fetchError, // 프로필 정보 로딩 실패 시 에러 메시지
+    hasFormChanged, // form 변경 여부 (useMemo로 최적화됨)
     handleChange, // 입력 필드 변경 핸들러
     handleSubmit, // form 제출 핸들러
   };
