@@ -15,6 +15,7 @@ interface StoreInfo {
   isActive?: boolean;
   percentage?: number;
   className?: string;
+  onClick?: () => void;
 }
 
 const Post = ({
@@ -27,6 +28,7 @@ const Post = ({
   isActive = true,
   percentage,
   className,
+  onClick,
 }: StoreInfo) => {
   const { workInfo, isColor, overlayText, getBadgeColor } = usePost({
     startAt,
@@ -35,7 +37,10 @@ const Post = ({
   });
 
   return (
-    <div className={postClasses.container({ className })}>
+    <div
+      className={postClasses.container({ className })}
+      onClick={onClick} // 추가
+      style={{ cursor: onClick ? 'pointer' : 'default' }}>
       {/* 이미지 + 오버레이 */}
       <div className="h-[84px] overflow-hidden rounded-[12px] sm:h-[160px]">
         <PostImage
