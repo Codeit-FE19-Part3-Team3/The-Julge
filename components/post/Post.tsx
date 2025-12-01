@@ -19,6 +19,7 @@ interface StoreInfo {
   isActive?: boolean;
   percentage?: number;
   className?: string;
+  onClick?: () => void;
 }
 
 const Post = ({
@@ -32,6 +33,7 @@ const Post = ({
   isActive = true,
   percentage,
   className,
+  onClick,
 }: StoreInfo) => {
   const router = useRouter();
   const { workInfo, isColor, overlayText, getBadgeColor } = usePost({
@@ -46,8 +48,8 @@ const Post = ({
 
   return (
     <div
-      onClick={goDetail}
-      className={`${postClasses.container()} ${className || ''} cursor-pointer transition-colors duration-200 hover:scale-[1.02] hover:bg-[var(--color-gray-10)] hover:shadow-lg`}>
+      className={`${postClasses.container({ className })} ${onClick ? 'cursor-pointer' : 'cursor-default'}`}
+      onClick={onClick}>
       {/* 이미지 + 오버레이 */}
       <div className="h-[84px] max-w-[280px] overflow-hidden rounded-lg transition-transform duration-200 hover:brightness-105 sm:h-[160px]">
         <PostImage
