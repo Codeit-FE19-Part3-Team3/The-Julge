@@ -47,19 +47,6 @@ const ConfirmModal = ({
   onConfirm,
   onCancel,
 }: ConfirmModalProps) => {
-  // 메시지를 줄바꿈 처리
-  const renderMessage = () => {
-    // \n을 기준으로 분리
-    const lines = message.split(/\n|<br\s*\/?>/gi);
-
-    return lines.map((line, index) => (
-      <span key={index}>
-        {line}
-        {index < lines.length - 1 && <br />}
-      </span>
-    ));
-  };
-
   return (
     <BaseModal isOpen={isOpen} onClose={onCancel}>
       <div className="flex h-[183px] w-[298px] flex-col items-center justify-center gap-5 p-4">
@@ -72,7 +59,9 @@ const ConfirmModal = ({
         />
 
         {/* 메시지 */}
-        <p className="text-[16px]">{renderMessage()}</p>
+        <p className="text-[16px] whitespace-pre-line">
+          {message.replace(/<br\s*\/?>/gi, '\n')}
+        </p>
 
         {/* 버튼 그룹 */}
         <div className="flex gap-3">
