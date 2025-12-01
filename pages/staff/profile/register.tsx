@@ -9,6 +9,7 @@ import { ApiErrorResponse } from '@/api/types';
 import users from '@/api/users';
 import Button from '@/components/common/Button';
 import Dropdown from '@/components/common/Dropdown';
+import ConfirmModal from '@/components/common/modal/ConfirmModal';
 import ErrorModal from '@/components/common/modal/ErrorModal';
 import { SEOUL_DISTRICTS } from '@/constants/locations';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -38,7 +39,7 @@ const INPUT_BOX_STYLE =
 
 // 입력 공통 스타일
 const INPUT_STYLE =
-  'border-gray-30 placeholder:text-gray-40 w-full rounded-md border px-5 py-4 focus:ring-2 focus:ring-red-50 focus:outline-none';
+  'border-gray-30 placeholder:text-gray-40 w-full rounded-md border px-5 py-4 focus:ring-2 focus:ring-red-50 focus:outline-none disabled:bg-gray-10 disabled:cursor-not-allowed';
 
 const Register = () => {
   const router = useRouter();
@@ -50,13 +51,22 @@ const Register = () => {
     address: '',
     bio: '',
   });
+  // 초기 프로필 데이터 저장
+  const [initialData, setInitialData] = useState({
+    name: '',
+    phone: '',
+    address: '',
+    bio: '',
+  });
   // 로딩 상태
   const [isLoading, setIsLoading] = useState(false);
-  // Modal 상태
-  const [modal, setModal] = useState<ModalState>({
+  // 에러 Modal 상태
+  const [showErrorModal, setShowErrorModal] = useState<ModalState>({
     isOpen: false,
     message: '',
   });
+  // 확인 Modal 상태
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   // Dropdown 표시 상태
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -90,13 +100,17 @@ const Register = () => {
           const response = await users.getUser(user.id);
           const userData = response.item;
 
-          // 기존 데이터가 있으면 폼에 채우기
-          setFormData({
+          const profileData = {
             name: userData.name || '',
             phone: userData.phone || '',
             address: userData.address || '',
             bio: userData.bio || '',
-          });
+          };
+
+          // 기존 데이터가 있으면 form에 채우기
+          setFormData(profileData);
+          // 초기 데이터 저장
+          setInitialData(profileData);
         } catch (error) {
           console.error('사용자 정보 조회 실패:', error);
         }
@@ -108,21 +122,56 @@ const Register = () => {
 
   // Modal 표시
   const openModal = (message: string) => {
-    setModal({ isOpen: true, message });
+    setShowErrorModal({ isOpen: true, message });
   };
 
-  // Modal 닫기
+  // 일반 Modal 닫기
   const closeModal = () => {
-    setModal({ isOpen: false, message: '' });
-    if (modal.message === MODAL_MESSAGES.SUCCESS) {
+    setShowErrorModal({ isOpen: false, message: '' });
+  };
+
+  // 성공 Modal 닫기 (페이지 이동 포함)
+  const closeSuccessModal = () => {
+    setShowErrorModal({ isOpen: false, message: '' });
+    router.push('/staff/profile');
+  };
+
+  // form 변경 여부 확인
+  const hasFormChanged = () => {
+    return (
+      formData.name !== initialData.name ||
+      formData.phone !== initialData.phone ||
+      formData.address !== initialData.address ||
+      formData.bio !== initialData.bio
+    );
+  };
+
+  // X 버튼 클릭 처리
+  const handleClose = () => {
+    if (hasFormChanged()) {
+      setShowConfirmModal(true);
+    } else {
       router.push('/staff/profile');
     }
+  };
+
+  // 확인 Modal에서 "예" 선택
+  const confirmLeave = () => {
+    setShowConfirmModal(false);
+    router.push('/staff/profile');
+  };
+
+  // 확인 Modal에서 "아니오" 선택
+  const cancelLeave = () => {
+    setShowConfirmModal(false);
   };
 
   // Dropdown 버튼 클릭 처리
   const handleDropdownToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setIsDropdownOpen((prev) => !prev);
+    if (!isLoading) {
+      setIsDropdownOpen((prev) => !prev);
+    }
   };
 
   // Dropdown 닫기
@@ -132,18 +181,22 @@ const Register = () => {
 
   // 지역 선택 처리
   const handleAddressSelect = (value: string) => {
-    setFormData((prev) => ({ ...prev, address: value }));
-    setIsDropdownOpen(false);
+    if (!isLoading) {
+      setFormData((prev) => ({ ...prev, address: value }));
+      setIsDropdownOpen(false);
+    }
   };
 
   // 입력 필드 변경 처리
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    if (!isLoading) {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   // 내 프로필 등록 처리
@@ -174,10 +227,8 @@ const Register = () => {
         bio: formData.bio || '',
       });
 
-      setIsLoading(false);
       openModal(MODAL_MESSAGES.SUCCESS);
     } catch (error) {
-      setIsLoading(false);
       let errorMessage = MODAL_MESSAGES.ERROR_DEFAULT;
 
       // API 에러 상태 코드에 따른 메시지 처리
@@ -222,8 +273,9 @@ const Register = () => {
             내 프로필
           </h2>
           <button
-            onClick={() => router.push('/staff/profile')}
-            className="flex h-6 w-6 items-center justify-center sm:h-8 sm:w-8">
+            onClick={handleClose}
+            disabled={isLoading}
+            className="flex h-6 w-6 items-center justify-center disabled:cursor-not-allowed disabled:opacity-50 sm:h-8 sm:w-8">
             <Image
               src="/images/close.svg"
               width={14}
@@ -247,6 +299,7 @@ const Register = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder="입력"
+              disabled={isLoading}
               className={`${INPUT_STYLE}`}
             />
           </div>
@@ -262,6 +315,7 @@ const Register = () => {
               value={formData.phone}
               onChange={handleChange}
               placeholder="입력"
+              disabled={isLoading}
               className={`${INPUT_STYLE}`}
             />
           </div>
@@ -272,6 +326,7 @@ const Register = () => {
             <button
               type="button"
               onClick={handleDropdownToggle}
+              disabled={isLoading}
               className={`${INPUT_STYLE} flex items-center justify-between`}>
               <span
                 className={formData.address ? 'text-black' : 'text-gray-40'}>
@@ -296,7 +351,7 @@ const Register = () => {
               )}
             </button>
 
-            {isDropdownOpen && (
+            {isDropdownOpen && !isLoading && (
               <Dropdown
                 items={[...SEOUL_DISTRICTS]}
                 selected={formData.address}
@@ -317,6 +372,7 @@ const Register = () => {
               onChange={handleChange}
               placeholder="입력"
               rows={5}
+              disabled={isLoading}
               className={`${INPUT_STYLE} resize-none`}
             />
           </div>
@@ -328,16 +384,31 @@ const Register = () => {
             variant="primary"
             size="large"
             onClick={handleSubmit}
-            disabled={isLoading}>
+            disabled={isLoading || !hasFormChanged()}>
             {isLoading ? '처리중...' : '등록하기'}
           </Button>
         </div>
       </div>
 
       {/* Modal */}
-      {modal.isOpen && (
-        <ErrorModal message={modal.message} onClose={closeModal} />
+      {showErrorModal.isOpen && (
+        <ErrorModal
+          message={showErrorModal.message}
+          onClose={
+            showErrorModal.message === MODAL_MESSAGES.SUCCESS
+              ? closeSuccessModal
+              : closeModal
+          }
+        />
       )}
+
+      {/* 확인 모달 */}
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        message="변경된 내용이 저장되지 않습니다.<br>페이지를 나가시겠습니까?"
+        onConfirm={confirmLeave}
+        onCancel={cancelLeave}
+      />
     </div>
   );
 };
