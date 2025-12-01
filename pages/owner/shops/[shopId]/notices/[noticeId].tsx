@@ -195,7 +195,7 @@ const NoticeDetail = () => {
               <div className="mb-2 text-[18px] font-semibold max-[375px]:text-[16px]">
                 신청자 목록
               </div>
-              <div>
+              <div className="mb-15">
                 <Table
                   data={transformApplicationData(applicationList).map(
                     (item) => ({

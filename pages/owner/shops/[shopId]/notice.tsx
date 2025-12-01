@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
-
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-
+import { useRouter } from 'next/router';
 import noticesApi from '@/api/owner/notice';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
@@ -12,17 +11,50 @@ const PostNotice = () => {
   const [startsAt, setStartsAt] = useState('');
   const [workhour, setWorkhour] = useState('');
   const [description, setDescription] = useState('');
-  const { shopId: paramShopId } = useParams<{ shopId: string }>();
-  const [shopId, setShopId] = useState<string | undefined>(paramShopId);
+  // const { shopId: paramShopId } = useParams<{ shopId: string }>();
+  // const [shopId, setShopId] = useState<string | undefined>(paramShopId);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const router = useRouter();
 
+  const getTodayDateTime = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  };
+  // 로그인 체크
   useEffect(() => {
-    // 클라이언트에서만 실행
-    if (typeof window !== 'undefined' && !shopId) {
-      const pathname = window.location.pathname;
-      const extractedShopId = pathname.split('/')[3];
-      setShopId(extractedShopId);
+    const checkAuth = () => {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        router.push('/login');
+      }
+    };
+    checkAuth();
+  }, [router]);
+
+  // 자동 높이 조절
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
     }
-  }, [shopId]);
+  };
+
+  // useEffect(() => {
+  //   // 클라이언트에서만 실행
+  //   if (typeof window !== 'undefined' && !shopId) {
+  //     const pathname = window.location.pathname;
+  //     const extractedShopId = pathname.split('/')[3];
+  //     setShopId(extractedShopId);
+  //   }
+  // }, [shopId]);
+  const { shopId } = useParams<{ shopId: string }>();
 
   // 입력 "YYYY-MM-DD HH:mm" → "YYYY-MM-DDTHH:mm:00Z" 로 변환
   const toISOZ = (dateStr: string) => {
@@ -61,62 +93,71 @@ const PostNotice = () => {
   };
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center pt-25 pb-25">
+    <div className="flex min-h-screen w-full flex-col items-center px-4 py-10 md:px-8 md:py-16">
       {/* 상단 제목 + 닫기 버튼 */}
-      <div className="flex h-full w-[964px] items-center justify-between max-[744px]:w-[680px] max-[375px]:w-[351px]">
-        <h1 className="text-[28px] font-bold">공고 등록</h1>
-        <div className="h-8 w-8 cursor-pointer">
+      <div className="mb-8 flex w-full max-w-[964px] items-center justify-between">
+        <h1 className="text-2xl font-bold md:text-[28px]">공고 등록</h1>
+        <div
+          onClick={() => router.push(`/owner/shops/${shopId}`)}
+          className="h-8 w-8 flex-shrink-0 cursor-pointer">
           <BadgeClose />
         </div>
       </div>
+
       {/* 3개 입력 영역 */}
-      <div className="flex w-full justify-center">
-        <div className="align-center mb-8 flex justify-center gap-5 max-[744px]:flex-wrap max-[744px]:justify-start">
-          <div className="w-[308px] max-[744px]:w-[330px] max-[375px]:w-[351px]">
-            <Input
-              type="number"
-              label="시급*"
-              value={hourlyPay}
-              onChange={setHourlyPay}
-              unit="원"
-              placeholder="시급을 입력하세요"
-            />
-          </div>
-          <div className="w-[308px] max-[744px]:w-[330px] max-[375px]:w-[351px]">
-            <Input
-              type="text"
-              label="시작 시간*"
-              value={startsAt}
-              onChange={setStartsAt}
-              placeholder="2025-12-23 13:00"
-            />
-          </div>
-          <div className="w-[308px] max-[744px]:w-[330px] max-[375px]:w-[351px]">
-            <Input
-              type="number"
-              label="근무 시간*"
-              value={workhour}
-              onChange={setWorkhour}
-              placeholder="근무 시간을 입력하세요"
-              unit="시간"
-            />
-          </div>
+      <div className="mb-6 grid w-full max-w-[964px] grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="w-full">
+          <Input
+            type="number"
+            label="시급*"
+            value={hourlyPay}
+            onChange={setHourlyPay}
+            unit="원"
+            placeholder="시급을 입력하세요"
+          />
+        </div>
+        <div className="w-full">
+          <Input
+            type="text"
+            label="시작 시간*"
+            value={startsAt}
+            onChange={setStartsAt}
+            placeholder={getTodayDateTime()}
+          />
+        </div>
+        <div className="w-full md:col-span-2 lg:col-span-1">
+          <Input
+            type="number"
+            label="근무 시간*"
+            value={workhour}
+            onChange={setWorkhour}
+            placeholder="근무 시간을 입력하세요"
+            unit="시간"
+          />
         </div>
       </div>
-      {/* 설명 입력 필드 */}
-      <div className="mt-8 w-[964px] max-[744px]:w-[680px] max-[375px]:w-[351px]">
-        <Input
-          type="text"
-          label="설명"
+
+      {/* 설명 입력 필드 - 자동 높이 조절 */}
+      <div className="mb-6 w-full max-w-[964px]">
+        <label className="mb-2 block text-sm font-medium text-gray-700">
+          설명
+        </label>
+        <textarea
+          ref={textareaRef}
           value={description}
-          onChange={setDescription}
+          onChange={(e) => {
+            setDescription(e.target.value);
+            adjustTextareaHeight();
+          }}
           placeholder="공고 설명을 입력하세요"
+          rows={4}
+          className="focus:border-blue-20 ffocus:outline-none w-full resize-none overflow-hidden rounded-md border border-gray-300 px-4 py-3 transition-colors outline-none"
         />
       </div>
 
       {/* 등록 버튼 */}
-      <div className="mt-8 h-[48px] w-[312px]">
-        <Button onClick={handleSubmit} className="h-full w-full max-w-none!">
+      <div className="w-full max-w-[312px]">
+        <Button onClick={handleSubmit} className="h-12 w-full max-w-none!">
           등록하기
         </Button>
       </div>
