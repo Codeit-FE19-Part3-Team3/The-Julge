@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { useRouter } from 'next/router';
+
 import noticesApi from '@/api/owner/notice';
 import shops from '@/api/owner/shop';
 import { ShopRequest, NoticeRequest } from '@/api/types';
@@ -12,7 +14,7 @@ const MyShop = () => {
   const [shop, setShop] = useState<({ id: string } & ShopRequest) | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const router = useRouter();
   type ShopNoticeItem = { id: string } & NoticeRequest & { closed: boolean };
   const [notices, setNotices] = useState<ShopNoticeItem[]>([]);
   const allowedCategories = [
@@ -61,18 +63,18 @@ const MyShop = () => {
         setShop(shopData);
 
         const noticeRes = await noticesApi.getShopNoticeList(shopId);
-
         const noticeItems = noticeRes.items.map((n) => n.item);
-
         setNotices(noticeItems);
       } finally {
         setLoading(false);
       }
     };
-
     fetchShopAndNotices();
   }, []);
 
+  const handlePostClick = (shopId: string, noticeId: string) => {
+    router.push(`/owner/shops/${shopId}/notices/${noticeId}`);
+  };
   if (loading) return <div>로딩중...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
 
@@ -119,12 +121,13 @@ const MyShop = () => {
                     <Post
                       key={notice.id}
                       name={shop.name}
-                      noticeId={notice.id}
                       startAt={notice.startsAt}
                       workTime={notice.workhour}
                       location={shop.address1}
                       wage={notice.hourlyPay}
+                      onClick={() => handlePostClick(shop.id, notice.id)}
                       imageUrl={shop.imageUrl}
+                      isActive={!notice.closed}
                     />
                   ))
                 ) : (
