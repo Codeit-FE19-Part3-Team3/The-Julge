@@ -2,7 +2,7 @@ import { api } from './client';
 import {
   SignupRequest,
   SignupResponse,
-  GetUserResponse,
+  UserInfo,
   UpdateUserRequest,
   UpdateUserResponse,
 } from './types';
@@ -25,11 +25,11 @@ const users = {
 
   /**
    * 내 정보 조회
-   * @param userId - 사용자 ID
+   * @param user_id - 사용자 ID
    * @returns 사용자 정보
    */
-  getUser: async (userId: string) => {
-    const response = await api.get<GetUserResponse>(`/users/${userId}`);
+  getUser: async (user_id: string) => {
+    const response = await api.get<UserInfo>(`/users/${user_id}`);
     return response;
   },
 
