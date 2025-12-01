@@ -3,6 +3,7 @@ import { NoticeItem } from '@/api/notices';
 
 export interface TransformedNotice {
   id: string;
+  shopId: string;
   name: string;
   startAt: string;
   workTime: number;
@@ -25,6 +26,7 @@ export function transformNoticeData(item: NoticeItem): TransformedNotice {
 
   return {
     id: item.id,
+    shopId: shop.item.id,
     name: shop.item.name,
     startAt: startsAt,
     workTime: workhour,
