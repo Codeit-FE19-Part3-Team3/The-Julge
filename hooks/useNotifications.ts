@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import alert from '@/api/alert';
+import alert from '@/apis/alert';
 import { useIsEmployee } from '@/hooks/useCheckUserType';
 import { useAuthStore } from '@/store/useAuthStore';
 

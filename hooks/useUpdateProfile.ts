@@ -3,8 +3,8 @@ import { useMemo, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 
-import { ApiErrorResponse } from '@/api/types';
-import users from '@/api/users';
+import { ApiErrorResponse } from '@/apis/types';
+import users from '@/apis/users';
 import { UserProfile } from '@/hooks/useUserProfile';
 import { useAuthStore } from '@/store/useAuthStore';
 

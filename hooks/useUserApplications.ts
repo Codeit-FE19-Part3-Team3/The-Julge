@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { UserApplicationsResponse } from '@/api/types';
-import users from '@/api/users';
+import { UserApplicationsResponse } from '@/apis/types';
+import users from '@/apis/users';
 
 // useUserApplications 훅의 옵션 타입
 interface UseUserApplicationsOptions {

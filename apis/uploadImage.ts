@@ -1,4 +1,3 @@
-
 import { api } from './client';
 
 /**
@@ -66,4 +65,3 @@ export async function uploadImage(file: File): Promise<string> {
   // 3. query parameters 제거한 최종 URL 반환
   return removeQueryParams(presignedUrl);
 }
-

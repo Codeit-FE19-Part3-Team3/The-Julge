@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import noticesApi from '@/api/owner/notice';
-import shops from '@/api/owner/shop';
-import { ShopRequest, NoticeRequest } from '@/api/types';
-import users from '@/api/users';
+import noticesApi from '@/apis/owner/notice';
+import shops from '@/apis/owner/shop';
+import { ShopRequest, NoticeRequest } from '@/apis/types';
+import users from '@/apis/users';
 import Button from '@/components/common/Button';
 import ShopBanner from '@/components/owner/ShopBanner';
 import Post from '@/components/post/Post';

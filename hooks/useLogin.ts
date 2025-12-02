@@ -4,8 +4,8 @@ import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
-import token from '@/api/token';
-import { ApiErrorResponse, LoginRequest } from '@/api/types';
+import token from '@/apis/token';
+import { ApiErrorResponse, LoginRequest } from '@/apis/types';
 import { useAuthStore } from '@/store/useAuthStore';
 
 /**

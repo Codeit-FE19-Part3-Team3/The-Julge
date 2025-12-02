@@ -12,8 +12,8 @@ import {
   LoginRequest,
   SignupRequest,
   UserType,
-} from '@/api/types';
-import users from '@/api/users';
+} from '@/apis/types';
+import users from '@/apis/users';
 import AuthRedirect from '@/components/auth/AuthRedirect';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';

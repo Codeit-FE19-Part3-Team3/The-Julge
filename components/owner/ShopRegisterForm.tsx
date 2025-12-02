@@ -4,8 +4,8 @@ import { useState } from 'react';
 
 import Image from 'next/image';
 
-import { registerShop } from '@/api/shopRegister';
-import { uploadImage } from '@/api/uploadImage';
+import { registerShop } from '@/apis/shopRegister';
+import { uploadImage } from '@/apis/uploadImage';
 import Button from '@/components/common/Button';
 import Dropdown from '@/components/common/Dropdown';
 import Input from '@/components/common/Input';

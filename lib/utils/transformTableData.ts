@@ -1,4 +1,4 @@
-import { ApplicationItem } from '@/api/types';
+import { ApplicationItem } from '@/apis/types';
 import { formatPay } from '@/lib/utils/formatPay';
 import { formatWorkTime } from '@/lib/utils/formatWorkTime';
 

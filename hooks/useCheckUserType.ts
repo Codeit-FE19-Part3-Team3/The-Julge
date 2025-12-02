@@ -1,4 +1,4 @@
-import { UserType } from '@/api/types';
+import { UserType } from '@/apis/types';
 import { useAuthStore } from '@/store/useAuthStore';
 
 /**

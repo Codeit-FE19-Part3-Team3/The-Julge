@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 
-import { ApiErrorResponse } from '@/api/types';
-import users from '@/api/users';
+import { ApiErrorResponse } from '@/apis/types';
+import users from '@/apis/users';
 import { useAuthStore } from '@/store/useAuthStore';
 
 // 사용자 프로필 데이터 타입 정의

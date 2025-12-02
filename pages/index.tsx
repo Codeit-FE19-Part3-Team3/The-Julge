@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import { fetchNoticeList, FetchNoticeListParams } from '@/api/notices';
+import { fetchNoticeList, FetchNoticeListParams } from '@/apis/notices';
 import Dropdown from '@/components/common/Dropdown';
 import DetailFilterModal, {
   FilterValues,

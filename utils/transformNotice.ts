@@ -1,4 +1,4 @@
-import { NoticeItem } from '@/api/notices';
+import { NoticeItem } from '@/apis/notices';
 
 /**
  * 컴포넌트에서 사용하는 변환된 공고 타입
@@ -41,7 +41,7 @@ export const transformNoticeData = (notice: NoticeItem): TransformedNotice => {
     percentage,
     description: notice.description,
   };
-}
+};
 
 export const calculatePercentage = (
   currentPay: number,

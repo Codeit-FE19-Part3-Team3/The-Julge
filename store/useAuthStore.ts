@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { User } from '@/api/types';
+import { User } from '@/apis/types';
 
 /**
  * 인증 상태 타입 정의

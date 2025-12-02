@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { fetchNoticeDetail } from '@/api/notices';
+import { fetchNoticeDetail } from '@/apis/notices';
 import { useRecentNotices } from '@/hooks/useRecentNotices';
 import {
   transformNoticeData,

@@ -12,17 +12,17 @@ export interface RegisterShopRequest {
 
 export const uploadImage = async (file: File) => {
   const formData = new FormData();
-  formData.append("image", file);
+  formData.append('image', file);
 
-  const res = await api.post<{ url: string }>("/images/upload", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
+  const res = await api.post<{ url: string }>('/images/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
 
   return res.url;
 };
 
 const shops = {
-  register: (data: RegisterShopRequest) => api.post("/shops", data),
+  register: (data: RegisterShopRequest) => api.post('/shops', data),
 };
 
 export { shops };

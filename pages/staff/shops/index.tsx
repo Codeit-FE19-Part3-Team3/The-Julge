@@ -9,8 +9,8 @@ import {
   fetchNoticeDetail,
   applyNotice,
   cancelApplication,
-} from '@/api/notices';
-import users from '@/api/users';
+} from '@/apis/notices';
+import users from '@/apis/users';
 import Button from '@/components/common/Button';
 import AlertModal from '@/components/common/modal/AlertModal';
 import ConfirmModal from '@/components/common/modal/ConfirmModal';

@@ -4,9 +4,9 @@ import { useRouter } from 'next/router';
 
 import axios from 'axios';
 
-import applications from '@/api/owner/application';
-import notices from '@/api/owner/notice';
-import { ApplicationItem, NoticeRequest, ShopRequest } from '@/api/types';
+import applications from '@/apis/owner/application';
+import notices from '@/apis/owner/notice';
+import { ApplicationItem, NoticeRequest, ShopRequest } from '@/apis/types';
 import AlertModal from '@/components/common/modal/AlertModal';
 import Table from '@/components/common/Table';
 import PostBanner from '@/components/owner/PostBanner';

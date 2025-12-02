@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { UserType } from '@/api/types';
+import { UserType } from '@/apis/types';
 import NotificationModal from '@/components/common/notification/NotificationModal';
 import { useIsEmployer, useIsEmployee } from '@/hooks/useCheckUserType';
 import { useNotifications } from '@/hooks/useNotifications';

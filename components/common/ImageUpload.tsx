@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import { toast } from 'react-toastify';
 
-import { uploadImage } from '@/api/uploadImage';
+import { uploadImage } from '@/apis/uploadImage';
 
 /**
  * ImageUpload 사용 예제

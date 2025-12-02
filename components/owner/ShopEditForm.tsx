@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-import { getMyShop, updateShop } from '@/api/shopEdit';
-import { uploadImage } from '@/api/uploadImage'; //  등록 페이지와 동일한 방식 사용
+import { getMyShop, updateShop } from '@/apis/shopEdit';
+import { uploadImage } from '@/apis/uploadImage'; //  등록 페이지와 동일한 방식 사용
 import Button from '@/components/common/Button';
 import Dropdown from '@/components/common/Dropdown';
 import Input from '@/components/common/Input';
