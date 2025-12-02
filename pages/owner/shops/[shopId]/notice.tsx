@@ -137,7 +137,7 @@ const PostNotice = () => {
 
       await noticesApi.postShopNotice(shopId as string, payload);
       toast.success('공고가 등록되었습니다!');
-      router.push(`/owner/shops/${shopId}`);
+      router.push(`/owner/shops`);
     } catch (e) {
       // Axios 에러 처리
       if (axios.isAxiosError(e) && e.response?.data?.message) {
@@ -160,7 +160,7 @@ const PostNotice = () => {
         <div className="mb-8 flex w-full max-w-[964px] items-center justify-between">
           <h1 className="text-2xl font-bold md:text-[28px]">공고 등록</h1>
           <div
-            onClick={() => router.push(`/owner/shops/${shopId}`)}
+            onClick={() => router.push(`/owner/shops`)}
             className="h-8 w-8 shrink-0 cursor-pointer">
             <BadgeClose />
           </div>

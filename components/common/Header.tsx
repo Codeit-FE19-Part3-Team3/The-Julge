@@ -71,7 +71,7 @@ const Header = () => {
   const router = useRouter();
 
   // 인증 상태 및 함수 가져오기
-  const { isAuthenticated, user, clearAuth } = useAuthStore();
+  const { isAuthenticated, clearAuth } = useAuthStore();
   const isEmployer = useIsEmployer();
   const isEmployee = useIsEmployee();
 
@@ -97,8 +97,6 @@ const Header = () => {
   };
 
   const userRole = getUserRole();
-
-  const shopId = user?.shop?.item.id;
 
   // 검색어 상태
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -134,17 +132,8 @@ const Header = () => {
   const renderNavItem = (item: NavItem) => {
     // Link 컴포넌트 렌더링 (href 속성이 있는 경우)
     if ('href' in item) {
-      // Employer이고 shopId가 있으며 label이 '내 가게'인 경우 shopId를 href에 추가
-      let linkHref = item.href;
-      if (isEmployer && shopId && item.label === '내 가게') {
-        linkHref = item.href + '/' + shopId;
-      }
-
       return (
-        <Link
-          key={item.label}
-          href={linkHref}
-          className={`${TEXT_BUTTON_STYLE}`}>
+        <Link key={item.label} href={item.href} className={TEXT_BUTTON_STYLE}>
           {item.label}
         </Link>
       );

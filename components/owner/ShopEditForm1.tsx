@@ -264,7 +264,7 @@ const ShopEditForm = () => {
           message="수정이 완료되었습니다."
           onClose={() => {
             setIsModalOpen(false);
-            window.location.href = '/owner/my-shop';
+            window.location.href = '/owner/shops';
           }}
         />
       )}
