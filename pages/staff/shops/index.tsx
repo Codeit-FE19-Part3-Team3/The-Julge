@@ -256,7 +256,9 @@ const NoticeDetailPage = () => {
     clickedShopId: string,
     clickedNoticeId: string
   ) => {
-    router.push(`/staff/shops/${clickedShopId}/notices/${clickedNoticeId}`);
+    router.push(
+      `/staff/shops?shopId=${clickedShopId}&noticeId=${clickedNoticeId}`
+    );
   };
 
   if (isLoading) {

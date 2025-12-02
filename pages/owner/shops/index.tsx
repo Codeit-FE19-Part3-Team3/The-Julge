@@ -86,12 +86,12 @@ const MyShop = () => {
   }, [isAuthenticated, userId]);
 
   const handlePostClick = (shopId: string, noticeId: string) => {
-    router.push(`/owner/shops/${shopId}/notices?noticeId=${noticeId}`);
+    router.push(`/owner/notices?shopId=${shopId}&noticeId=${noticeId}`);
   };
 
   const handleRegisterNotice = () => {
     if (!shop) return;
-    router.push(`/owner/shops/${shop.id}/notices`);
+    router.push(`/owner/notices?shopId=$${shop.id}`);
   };
 
   // 인증되지 않았을 때
