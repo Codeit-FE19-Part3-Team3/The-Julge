@@ -52,7 +52,7 @@ const NAVIGATION: Record<UserRole, NavItem[]> = {
     { label: '회원가입', href: '/signup' },
   ],
   [UserType.EMPLOYER]: [
-    { label: '내 가게', href: '/' },
+    { label: '내 가게', href: '/owner/shops' },
     { label: '로그아웃', action: 'logout' },
     { label: '알림', isIcon: true },
   ],
@@ -60,8 +60,6 @@ const NAVIGATION: Record<UserRole, NavItem[]> = {
     { label: '내 프로필', href: '/staff/profile' },
     { label: '로그아웃', action: 'logout' },
     { label: '알림', isIcon: true },
-    { label: '가게 등록', href: '/owner/shop-register' },
-    { label: '가게 수정', href: '/owner/shop-edit' },
   ],
 };
 
@@ -73,7 +71,7 @@ const Header = () => {
   const router = useRouter();
 
   // 인증 상태 및 함수 가져오기
-  const { isAuthenticated, clearAuth } = useAuthStore();
+  const { isAuthenticated, user, clearAuth } = useAuthStore();
   const isEmployer = useIsEmployer();
   const isEmployee = useIsEmployee();
 
@@ -99,6 +97,8 @@ const Header = () => {
   };
 
   const userRole = getUserRole();
+
+  const shopId = user?.shop?.item.id;
 
   // 검색어 상태
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -134,10 +134,16 @@ const Header = () => {
   const renderNavItem = (item: NavItem) => {
     // Link 컴포넌트 렌더링 (href 속성이 있는 경우)
     if ('href' in item) {
+      // Employer이고 shopId가 있으며 label이 '내 가게'인 경우 shopId를 href에 추가
+      let linkHref = item.href;
+      if (isEmployer && shopId && item.label === '내 가게') {
+        linkHref = item.href + '/' + shopId;
+      }
+
       return (
         <Link
           key={item.label}
-          href={item.href}
+          href={linkHref}
           className={`${TEXT_BUTTON_STYLE}`}>
           {item.label}
         </Link>
