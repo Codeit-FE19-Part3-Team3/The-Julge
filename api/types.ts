@@ -11,6 +11,8 @@
  * const response: SignupResponse = await authApi.signup(data);
  */
 
+import type { ShopItem } from './notices';
+
 /**
  * API 공통 타입
  */
@@ -50,11 +52,10 @@ export interface User {
   phone?: string;
   address?: string;
   bio?: string;
-  shop?: { item: { id: string } & ShopRequest };
-}
-export interface UserInfo {
-  item: User;
-  links: ApiLink[];
+  shop: null | {
+    item: ShopItem;
+    href: string;
+  };
 }
 
 /**
@@ -299,6 +300,35 @@ export interface ApplicationsResponse {
   hasNext: boolean; // 다음 내용 존재 여부
   items: {
     item: ApplicationItem;
+    links: ApiLink[];
+  }[];
+  links: ApiLink[];
+}
+
+/**
+ * 유저의 지원 목록 조회 응답 (user 정보 제외)
+ */
+export interface UserApplicationItem {
+  id: string;
+  status: 'pending' | 'accepted' | 'rejected' | 'canceled';
+  createdAt: string;
+  shop: {
+    item: { id: string } & ShopRequest;
+    href: string;
+  };
+  notice: {
+    item: { id: string } & NoticeRequest & { closed: boolean };
+    href: string;
+  };
+}
+
+export interface UserApplicationsResponse {
+  offset: number;
+  limit: number;
+  count: number;
+  hasNext: boolean;
+  items: {
+    item: UserApplicationItem;
     links: ApiLink[];
   }[];
   links: ApiLink[];
