@@ -6,6 +6,20 @@ import { toast } from 'react-toastify';
 
 import { uploadImage } from '@/api/uploadImage';
 
+/**
+ * ImageUpload 사용 예제
+ *
+ * import ImageUpload from '@/components/common/ImageUpload';
+ *
+ * const Ex = () => {
+ *  return (
+ *   <>
+ *    <ImageUpload />
+ *   </>
+ *  );
+ *};
+ */
+
 const ImageUpload = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
