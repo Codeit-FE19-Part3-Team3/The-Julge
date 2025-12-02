@@ -104,11 +104,11 @@ const Header = () => {
   /**
    * 로그아웃 처리 함수
    * - 인증 정보 초기화
-   * - 홈 페이지로 리다이렉트
+   * - 공고 리스트 페이지로 리다이렉트
    */
   const handleLogout = () => {
     clearAuth();
-    router.push('/');
+    router.push('/staff/notices');
   };
 
   /**
@@ -195,7 +195,7 @@ const Header = () => {
       <nav className="grid grid-cols-[auto_1fr] grid-rows-[min-content_min-content] gap-y-4 px-5 py-2.5 sm:grid-cols-[auto_auto_auto] sm:gap-y-0 sm:px-8 sm:py-[15px]">
         {/* 로고 영역 */}
         <Link
-          href="/"
+          href="/staff/notices"
           className="col-start-1 row-start-1 inline-flex h-[30px] w-fit items-center justify-center sm:h-10">
           <Image
             src="/images/logo.svg"
