@@ -127,8 +127,8 @@ apiClient.interceptors.response.use(
       if (typeof window !== 'undefined') {
         useAuthStore.getState().clearAuth();
 
-        if (window.location.pathname !== '/login') {
-          window.location.assign('/login');
+        if (window.location.pathname !== '/auth?mode=login') {
+          window.location.assign('/auth?mode=login');
         }
       }
       return Promise.reject(error);

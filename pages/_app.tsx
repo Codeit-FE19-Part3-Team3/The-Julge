@@ -11,7 +11,7 @@ import Layout from '@/components/layout/Layout';
 import { useAuthStore } from '@/store/useAuthStore';
 
 // 레이아웃을 제외할 페이지 경로 정의 상수
-const EXCLUDED_PATHS = ['/login', '/signup'];
+const EXCLUDED_PATHS = ['/auth'];
 
 /**
  * Next.js App 컴포넌트

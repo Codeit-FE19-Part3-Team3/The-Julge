@@ -27,8 +27,8 @@ const PostNotice = () => {
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // 인증 체크: 로그인하지 않은 경우 /login으로 리다이렉트
-  const { isAuthenticated } = useAuthRedirect('/login');
+  // 인증 체크: 로그인하지 않은 경우 /auth?mode=login으로 리다이렉트
+  const { isAuthenticated } = useAuthRedirect('/auth?mode=login');
 
   // 가게 정보 불러오기 (originalHourlyPay 가져오기)
   useEffect(() => {

@@ -157,7 +157,7 @@ const NoticeDetailPage = () => {
     // 로그인 체크 (API 호출 전)
     if (!isAuthenticated) {
       alert('로그인이 필요합니다.');
-      router.push('/login');
+      router.push('/auth?mode=login');
       return;
     }
 
@@ -199,7 +199,7 @@ const NoticeDetailPage = () => {
       if (isAxiosError(err) && err.response) {
         if (err.response.status === 401) {
           alert('로그인이 필요합니다.');
-          router.push('/login');
+          router.push('/auth?mode=login');
         } else if (err.response.status === 400) {
           alert('이미 신청한 공고입니다.');
         } else {

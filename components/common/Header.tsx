@@ -48,8 +48,8 @@ type NavItem = NavLink | NavButton;
 // 사용자 역할별 네비게이션 메뉴 구성
 const NAVIGATION: Record<UserRole, NavItem[]> = {
   GUEST: [
-    { label: '로그인', href: '/login' },
-    { label: '회원가입', href: '/signup' },
+    { label: '로그인', href: '/auth?mode=login' },
+    { label: '회원가입', href: '/auth?mode=signup' },
   ],
   [UserType.EMPLOYER]: [
     { label: '내 가게', href: '/owner/shops' },

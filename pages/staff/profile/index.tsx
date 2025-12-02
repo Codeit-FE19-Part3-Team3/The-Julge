@@ -75,8 +75,8 @@ const EMPTY_STATE_DATA: Record<string, EmptyStateData> = {
 const Profile = () => {
   const router = useRouter();
 
-  // 인증 체크: 로그인하지 않은 경우 /login으로 리다이렉트
-  const { isAuthenticated } = useAuthRedirect('/login');
+  // 인증 체크: 로그인하지 않은 경우 /auth?mode=login으로 리다이렉트
+  const { isAuthenticated } = useAuthRedirect('/auth?mode=login');
 
   // Zustand에서 user 정보 가져오기
   const { user } = useAuthStore();

@@ -6,11 +6,11 @@ import { useAuthStore } from '@/store/useAuthStore';
 
 /**
  * 인증 상태를 확인하고 미인증 시 리다이렉트하는 훅
- * @param redirectTo - 미인증 시 리다이렉트할 경로 (기본값: '/login')
+ * @param redirectTo - 미인증 시 리다이렉트할 경로 (기본값: '/auth?mode=login')
  * @returns isReady - hydration 완료 여부
  * @returns isAuthenticated - 인증 여부
  */
-export const useAuthRedirect = (redirectTo: string = '/login') => {
+export const useAuthRedirect = (redirectTo: string = '/auth?mode=login') => {
   const router = useRouter();
   const [isReady, setIsReady] = useState(false);
 

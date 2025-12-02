@@ -36,7 +36,7 @@ const MyShop = () => {
   const [loading, setLoading] = useState(true);
 
   // 인증 체크
-  const { isAuthenticated } = useAuthRedirect('/login');
+  const { isAuthenticated } = useAuthRedirect('/auth?mode=login');
   const { user } = useAuthStore();
   const userId = user?.id || '';
 

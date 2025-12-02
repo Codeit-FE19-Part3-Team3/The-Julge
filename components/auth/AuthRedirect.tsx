@@ -20,13 +20,13 @@ const AUTH_REDIRECT_CONFIG = {
   login: {
     text: '회원이 아니신가요?',
     linkText: '회원가입하기',
-    href: '/signup',
+    href: '/auth?mode=signup',
     marginClass: 'mt-4 md:mt-5 lg:mt-5',
   },
   signup: {
     text: '이미 가입하셨나요?',
     linkText: '로그인하기',
-    href: '/login',
+    href: '/auth?mode=login',
     marginClass: 'mt-5 md:mt-5 lg:mt-4',
   },
 };
