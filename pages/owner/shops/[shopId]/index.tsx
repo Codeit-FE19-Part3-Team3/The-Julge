@@ -18,8 +18,6 @@ const MyShop = () => {
   const router = useRouter();
   type ShopNoticeItem = { id: string } & NoticeRequest & { closed: boolean };
   const [notices, setNotices] = useState<ShopNoticeItem[]>([]);
-  // const { shopId: paramShopId } = useParams<{ shopId: string }>();
-  // const [shopId, setShopId] = useState<string | undefined>(paramShopId);
 
   const allowedCategories = [
     '한식',
@@ -80,9 +78,6 @@ const MyShop = () => {
         const noticeRes = await noticesApi.getShopNoticeList(shopId);
         const noticeItems = noticeRes.items.map((n) => n.item);
         setNotices(noticeItems);
-
-        // const originalHourlyPay = shopData.originalHourlyPay;
-        // const noticeHourlyPay = noticeItems[0]?.hourlyPay;
       } finally {
         setLoading(false);
       }

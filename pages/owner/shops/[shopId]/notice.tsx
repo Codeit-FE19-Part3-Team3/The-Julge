@@ -86,8 +86,8 @@ const PostNotice = () => {
 
   // 입력 "YYYY-MM-DD HH:mm" → "YYYY-MM-DDTHH:mm:00Z" 로 변환
   const toISOZ = (dateStr: string) => {
-    const [date, time] = dateStr.split(' ');
-    return `${date}T${time}:00.000Z`;
+    const localDate = new Date(dateStr.replace(' ', 'T'));
+    return localDate.toISOString();
   };
 
   // 시급 변동폭 검증 (100% 미만 = 3자리수 미만)

@@ -169,10 +169,6 @@ export interface ShopResponse {
 }
 
 /**
- * 공고
- */
-
-/**
  * 공고 조회
  */
 export interface GetNoticesQuery {
@@ -238,7 +234,6 @@ export interface ShopNoticesResponse {
 /**
  * 가게의 공고 등록
  */
-
 export interface ShopNoticeResponse {
   item: {
     id: string;
@@ -271,7 +266,6 @@ export interface ShopNoticeDetailResponse {
 /**
  * 가게의 특정 공고의 지원 목록 조회
  */
-
 export interface GetApplicationsQuery {
   offset?: number; // 조회 시작 기준
   limit?: number; // 조회 개수
@@ -298,7 +292,6 @@ export interface ApplicationItem {
 /**
  *  유저의 지원 목록
  */
-
 export interface ApplicationsResponse {
   offset: number;
   limit: number;
