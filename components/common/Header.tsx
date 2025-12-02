@@ -119,7 +119,7 @@ const Header = () => {
     e.preventDefault();
     if (searchKeyword.trim()) {
       router.push(
-        `/auth/notices?search=${encodeURIComponent(searchKeyword.trim())}`
+        `/staff/notices?search=${encodeURIComponent(searchKeyword.trim())}`
       );
     }
   };
