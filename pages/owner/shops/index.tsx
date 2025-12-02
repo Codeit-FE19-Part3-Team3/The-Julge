@@ -124,7 +124,7 @@ const MyShop = () => {
                 내 가게를 소개하고 공고도 등록해보세요.
               </p>
               <Button
-                onClick={() => router.push('/owner/shop-register')}
+                onClick={() => router.push('/owner/shops/mange')}
                 className="h-[37px] w-full max-w-[346px] sm:h-[47px]">
                 가게 등록하기
               </Button>
@@ -141,7 +141,9 @@ const MyShop = () => {
                 imageUrl={shop.imageUrl}
                 description={shop.description}
                 shopId={shop.id}
-                onEditClick={() => router.push(`/owner/shops/${shop.id}/edit`)}
+                onEditClick={() =>
+                  router.push(`/owner/shops/manage?shopId=${shop.id}`)
+                }
                 onRegisterClick={handleRegisterNotice}
               />
 
