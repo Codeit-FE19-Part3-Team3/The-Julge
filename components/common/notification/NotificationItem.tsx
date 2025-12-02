@@ -1,48 +1,54 @@
-"use client";
+import { Notification } from '@/hooks/useNotifications';
 
 interface NotificationItemProps {
-  message: string;
-  status: string;
-  time: string;
+  notification: Notification;
+  onRead: (notificationId: string) => void;
 }
 
-export default function NotificationItem({
-  message,
-  status,
-  time,
-}: NotificationItemProps) {
+const STATUS_CONFIG = {
+  accepted: {
+    label: '승인',
+    bgColor: 'bg-blue-20',
+    textColor: 'text-blue-20',
+    borderColor: 'border-blue-20',
+  },
+  rejected: {
+    label: '거절',
+    bgColor: 'bg-red-30',
+    textColor: 'text-red-30',
+    borderColor: 'border-red-30',
+  },
+};
+
+const NotificationItem = ({ notification, onRead }: NotificationItemProps) => {
+  const { label, bgColor, textColor, borderColor } =
+    STATUS_CONFIG[notification.status];
+
+  const { id, read, shopName, time } = notification;
+
+  const handleClick = () => {
+    if (!read) {
+      onRead(id);
+    }
+  };
+
   return (
-    <div className="px-4 pt-2 pb-4 bg-white rounded-lg border shadow-sm flex flex-col gap-2">
+    <div
+      onClick={handleClick}
+      className={`flex max-w-[335px] flex-col items-start gap-1 rounded-[5px] border bg-white px-3 py-4 sm:max-w-[328px] ${read ? 'border-gray-20 cursor-default' : `${borderColor} cursor-pointer hover:opacity-80`}`}>
       {/*  아이콘 */}
-      <div className="mt-0.1">
-        <span
-          className={`inline-block w-[6px] h-[6px] rounded-full ${
-            status === "승인" ? "bg-[#0080FF]" : "bg-[#FF3B30]"
-          }`}
-        ></span>
-      </div>
+      <div className={`h-[5px] w-[5px] rounded-full ${bgColor}`} />
 
       {/* 메시지 */}
-      <p className="text-sm leading-5">
-        {message.includes("승인") ? (
-          <>
-            {message.split("승인")[0]}
-            <span className="text-[#0080FF] font-medium">승인</span>
-            {message.split("승인")[1]}
-          </>
-        ) : message.includes("거절") ? (
-          <>
-            {message.split("거절")[0]}
-            <span className="text-[#FF3B30] font-medium">거절</span>
-            {message.split("거절")[1]}
-          </>
-        ) : (
-          message
-        )}
-      </p>
+      <div className="text-sm leading-[22px] font-normal">
+        {shopName}({time}) 공고 지원이{' '}
+        <span className={`${textColor}`}>{`${label}`}</span>되었어요.
+      </div>
 
       {/* 시간 */}
-      <span className="text-xs text-gray-500">{time}</span>
+      <div className="text-gray-40 text-xs leading-4 font-normal">{time}</div>
     </div>
   );
-}
+};
+
+export default NotificationItem;
