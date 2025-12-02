@@ -14,7 +14,18 @@ const nextConfig: NextConfig = {
         hostname: 'bootcamp-project-api.s3.ap-northeast-2.amazonaws.com',
       },
       { protocol: 'https', hostname: 'i.pinimg.com' },
+      { protocol: 'https', hostname: 'example.com' },
     ],
+  },
+
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/staff/notices',
+        permanent: false,
+      },
+    ];
   },
 };
 

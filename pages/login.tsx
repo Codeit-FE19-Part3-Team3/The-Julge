@@ -123,12 +123,12 @@ const Login = () => {
     <>
       <Head>
         <title>로그인 | The-Julge</title>
-        <meta name="description" content="로그인 페이지입니다" />
+        <meta name="description" content="로그인 페이지" />
       </Head>
       <div className="flex h-screen w-screen justify-center p-5">
         <div className="flex w-full max-w-[350px] flex-col items-center justify-center">
           {/* 로고 */}
-          <Link href="/">
+          <Link href="/staff/notices">
             <Image
               src="/images/logo.svg"
               alt="The Julge 로고"
@@ -195,6 +195,6 @@ const Login = () => {
       )}
     </>
   );
-}
+};
 
 export default Login;

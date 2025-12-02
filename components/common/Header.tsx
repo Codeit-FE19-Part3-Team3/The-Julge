@@ -52,7 +52,7 @@ const NAVIGATION: Record<UserRole, NavItem[]> = {
     { label: '회원가입', href: '/signup' },
   ],
   [UserType.EMPLOYER]: [
-    { label: '내 가게', href: '/' },
+    { label: '내 가게', href: '/owner/shops' },
     { label: '로그아웃', action: 'logout' },
     { label: '알림', isIcon: true },
   ],
@@ -60,8 +60,6 @@ const NAVIGATION: Record<UserRole, NavItem[]> = {
     { label: '내 프로필', href: '/staff/profile' },
     { label: '로그아웃', action: 'logout' },
     { label: '알림', isIcon: true },
-    { label: '가게 등록', href: '/owner/shop-register' },
-    { label: '가게 수정', href: '/owner/shop-edit' },
   ],
 };
 
@@ -73,7 +71,7 @@ const Header = () => {
   const router = useRouter();
 
   // 인증 상태 및 함수 가져오기
-  const { isAuthenticated, clearAuth } = useAuthStore();
+  const { isAuthenticated, user, clearAuth } = useAuthStore();
   const isEmployer = useIsEmployer();
   const isEmployee = useIsEmployee();
 
@@ -100,17 +98,19 @@ const Header = () => {
 
   const userRole = getUserRole();
 
+  const shopId = user?.shop?.item.id;
+
   // 검색어 상태
   const [searchKeyword, setSearchKeyword] = useState('');
 
   /**
    * 로그아웃 처리 함수
    * - 인증 정보 초기화
-   * - 홈 페이지로 리다이렉트
+   * - 공고 리스트 페이지로 리다이렉트
    */
   const handleLogout = () => {
     clearAuth();
-    router.push('/');
+    router.push('/staff/notices');
   };
 
   /**
@@ -134,10 +134,16 @@ const Header = () => {
   const renderNavItem = (item: NavItem) => {
     // Link 컴포넌트 렌더링 (href 속성이 있는 경우)
     if ('href' in item) {
+      // Employer이고 shopId가 있으며 label이 '내 가게'인 경우 shopId를 href에 추가
+      let linkHref = item.href;
+      if (isEmployer && shopId && item.label === '내 가게') {
+        linkHref = item.href + '/' + shopId;
+      }
+
       return (
         <Link
           key={item.label}
-          href={item.href}
+          href={linkHref}
           className={`${TEXT_BUTTON_STYLE}`}>
           {item.label}
         </Link>
@@ -197,7 +203,7 @@ const Header = () => {
       <nav className="grid grid-cols-[auto_1fr] grid-rows-[min-content_min-content] gap-y-4 px-5 py-2.5 sm:grid-cols-[auto_auto_auto] sm:gap-y-0 sm:px-8 sm:py-[15px]">
         {/* 로고 영역 */}
         <Link
-          href="/"
+          href="/staff/notices"
           className="col-start-1 row-start-1 inline-flex h-[30px] w-fit items-center justify-center sm:h-10">
           <Image
             src="/images/logo.svg"

@@ -46,19 +46,12 @@ apiClient.interceptors.request.use(
 
       if (authStorage) {
         try {
-          /**
-           * 🔥 핵심 수정:
-           * auth-token → persist 구조(JSON)
-           * { state: { token: "JWT", ... }, version: 0 }
-           * 여기서 state.token만 정확하게 꺼낸다.
-           */
           const parsed = JSON.parse(authStorage);
           const token = parsed?.state?.token;
 
           if (typeof token === 'string' && token.length > 0) {
             config.headers.Authorization = `Bearer ${token}`;
           }
-
         } catch (error) {
           console.error('토큰 파싱 에러:', error);
         }
@@ -73,20 +66,59 @@ apiClient.interceptors.request.use(
 );
 
 /**
+ * User 정보 갱신 함수
+ * - API 호출 성공 시 User 정보를 조회하여 Zustand 업데이트
+ */
+const refreshUserInfo = async () => {
+  try {
+    const authState = useAuthStore.getState();
+
+    // 인증되지 않았거나 user 정보가 없으면 갱신하지 않음
+    if (!authState.isAuthenticated || !authState.user?.id) {
+      return;
+    }
+
+    // User 정보 조회 (순환 참조 방지를 위해 직접 axios 호출)
+    const response = await axios.get(`${BASE_URL}/users/${authState.user.id}`, {
+      headers: {
+        Authorization: `Bearer ${authState.token}`,
+      },
+    });
+
+    // User 정보 갱신
+    if (response.data?.item) {
+      authState.setAuth(authState.token!, response.data.item);
+    }
+  } catch (error) {
+    // User 조회 실패 시 조용히 무시 (백그라운드 작업이므로)
+    console.debug('User 정보 갱신 실패:', error);
+  }
+};
+
+/**
  * 응답 인터셉터
  * - 모든 응답 후 실행
  * - 성공 시: response.data만 반환하여 코드 간소화
  * - 실패 시: 에러 타입별 toast 표시 및 처리
  */
 apiClient.interceptors.response.use(
-  (response: AxiosResponse) => response.data,
+  async (response: AxiosResponse) => {
+    // 모든 API 성공 시 User 정보 갱신 (동기적으로 대기)
+    // User 조회 API 자체는 제외하여 무한 루프 방지
+    if (!response.config.url?.includes('/users/')) {
+      await refreshUserInfo();
+    }
+
+    return response.data;
+  },
   (error: AxiosError) => {
     let errorMessage = '';
 
     if (error.code === 'ECONNABORTED') {
       errorMessage = '요청 시간이 초과되었습니다. 다시 시도해 주세요.';
     } else if (error.request && !error.response) {
-      errorMessage = '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.';
+      errorMessage =
+        '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.';
     } else if (error.response?.status && error.response.status >= 500) {
       errorMessage = '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
     } else if (error.response?.status === 401) {
