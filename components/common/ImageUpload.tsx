@@ -20,10 +20,18 @@ import { uploadImage } from '@/api/uploadImage';
  *};
  */
 
-const ImageUpload = () => {
+interface ImageUploadProps {
+  initialImageUrl?: string;
+  onUploadSuccess?: (url: string) => void;
+}
+
+const ImageUpload = ({
+  initialImageUrl = '',
+  onUploadSuccess,
+}: ImageUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string>(initialImageUrl);
   const [isUploading, setIsUploading] = useState(false);
 
   const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +40,10 @@ const ImageUpload = () => {
       // 이미지 파일인지 검증
       if (!file.type.startsWith('image/')) {
         toast.error('이미지 파일만 업로드 가능합니다.');
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+        setSelectedFile(null);
         return;
       }
       setSelectedFile(file);
@@ -46,6 +58,7 @@ const ImageUpload = () => {
     try {
       const url = await uploadImage(selectedFile);
       setImageUrl(url);
+      onUploadSuccess?.(url);
       toast.success('이미지 업로드 성공!');
 
       // 초기화
@@ -62,7 +75,7 @@ const ImageUpload = () => {
   };
 
   return (
-    <div className="flex items-center justify-center py-15">
+    <div className="flex max-h-max min-h-[calc(100vh-231px)] items-center justify-center sm:min-h-[calc(100vh-170px)]">
       <div>
         <h2 className="mb-4 text-xl font-bold">이미지 업로드</h2>
         <div className="mb-4 flex items-center gap-3">

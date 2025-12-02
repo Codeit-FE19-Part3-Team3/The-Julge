@@ -15,7 +15,7 @@ interface PresignedUrlResponse {
  * @param fileName - 업로드할 파일명
  * @returns Presigned URL
  */
-export async function getPresignedUrl(fileName: string): Promise<string> {
+async function getPresignedUrl(fileName: string): Promise<string> {
   const response = await api.post<PresignedUrlResponse>('/images', {
     name: fileName,
   });
