@@ -8,7 +8,6 @@ import users from '@/api/users';
 import Button from '@/components/common/Button';
 import ShopBanner from '@/components/owner/ShopBanner';
 import Post from '@/components/post/Post';
-import { useParams } from 'react-router-dom';
 
 const MyShop = () => {
   const [shop, setShop] = useState<({ id: string } & ShopRequest) | null>(null);
@@ -57,7 +56,7 @@ const MyShop = () => {
   //     setShopId(extractedShopId);
   //   }
   // }, [shopId]);
-  const { shopId } = useParams<{ shopId: string }>();
+
   useEffect(() => {
     const fetchShopAndNotices = async () => {
       try {
@@ -126,13 +125,18 @@ const MyShop = () => {
           )}
 
           {!loading && !error && shop && (
-            <ShopBanner
-              category={category}
-              name={shop.name}
-              location={shop.address1}
-              imageUrl={shop.imageUrl}
-              description={shop.description}
-            />
+            <>
+              <ShopBanner
+                category={category}
+                name={shop.name}
+                location={shop.address1}
+                imageUrl={shop.imageUrl}
+                description={shop.description}
+                shopId={shop.id}
+                onEditClick={() => router.push(`/owner/shops/${shop.id}/edit`)}
+                onRegisterClick={handleRegisterNotice}
+              />
+            </>
           )}
         </div>
       </div>
@@ -165,12 +169,9 @@ const MyShop = () => {
                       공고를 등록해 보세요.
                     </div>
 
-                    <div
-                      // onClick={handleRegisterNotice}
-                      onClick={() => console.log('click!')}
-                      className="h-[47px] w-[346px] max-[375px]:h-[37px] max-[375px]:w-[108px]">
+                    <div className="h-[47px] w-[346px] max-[375px]:h-[37px] max-[375px]:w-[108px]">
                       <Button
-                        onClick={() => console.log('button click!')}
+                        onClick={handleRegisterNotice}
                         className="h-full w-full max-w-none">
                         공고 등록하기
                       </Button>
