@@ -43,7 +43,7 @@ const EMPTY_STATE_DATA: Record<string, EmptyStateData> = {
   APPLICATIONS: {
     message: '아직 신청 내역이 없어요.',
     buttonText: '공고 보러가기',
-    link: '/staff/notices',
+    link: '/notices',
   },
 };
 

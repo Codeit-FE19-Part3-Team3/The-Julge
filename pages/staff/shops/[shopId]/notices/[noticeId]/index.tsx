@@ -388,7 +388,7 @@ const NoticeDetailPage = () => {
             variant="primary"
             size="medium"
             className="max-w-none! px-4"
-            onClick={() => router.push(`/staff/notices`)}>
+            onClick={() => router.push(`/notices`)}>
             공고목록
           </Button>
         </div>
