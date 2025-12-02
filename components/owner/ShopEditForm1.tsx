@@ -9,7 +9,7 @@ import Button from "@/components/common/Button";
 import ErrorModal from "@/components/common/modal/ErrorModal";
 
 import { getMyShop, updateShop } from "@/api/shopEdit";
-import { uploadImage } from "@/api/uploadImage"; // ⭐ 등록 페이지와 동일한 방식 사용
+import { uploadImage } from "@/api/uploadImage"; //  등록 페이지와 동일한 방식 사용
 
 const ADDRESS_OPTIONS = [
   "서울시 종로구","서울시 중구","서울시 용산구","서울시 성동구","서울시 광진구",
@@ -43,7 +43,7 @@ export default function ShopEditForm() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // ⭐ 기존 가게 정보 불러오기
+  // 기존 가게 정보 불러오기
   useEffect(() => {
     async function fetchShop() {
       try {
@@ -70,12 +70,12 @@ export default function ShopEditForm() {
 
   if (loading) return <p className="p-10 text-center">불러오는 중...</p>;
 
-  // ⭐ 수정 요청
+  
   const handleSubmit = async () => {
     try {
       let finalImageUrl = imageUrl;
 
-      // ⭐ 이미지 변경이 있었다면 → 업로드 실행
+      // 이미지 변경이 있었다면 → 업로드 실행
       if (file) {
         finalImageUrl = await uploadImage(file);
         setImageUrl(finalImageUrl);
@@ -88,7 +88,7 @@ export default function ShopEditForm() {
         address2,
         originalHourlyPay: Number(hourlyPay),
         description,
-        imageUrl: finalImageUrl, // 변경되든 아니든 최종 이미지 URL 전달
+        imageUrl: finalImageUrl, 
       });
 
       setIsModalOpen(true);
@@ -205,7 +205,7 @@ export default function ShopEditForm() {
 
               setFile(selected);
               setPreviewUrl(URL.createObjectURL(selected));
-              setImageUrl(""); // 새로 업로드될 이미지라 기존 URL 제거
+              setImageUrl(""); 
             }}
           />
         </div>

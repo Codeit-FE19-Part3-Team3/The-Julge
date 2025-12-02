@@ -8,8 +8,7 @@ import Button from "@/components/common/Button";
 import Dropdown from "@/components/common/Dropdown";
 import Input from "@/components/common/Input";
 import ErrorModal from "@/components/common/modal/ErrorModal";
-import { uploadImage } from "@/api/uploadImage"; // ⭐ 팀원 방식 사용
-
+import { uploadImage } from "@/api/uploadImage"; // 
 const ADDRESS_OPTIONS = [
   "서울시 종로구",
   "서울시 중구",
@@ -57,7 +56,7 @@ const ShopRegisterForm = () => {
   const [isAddressOpen, setIsAddressOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 🔥 getPresignedUrl 삭제 / uploadImageToS3 삭제됨!
+  // 
 
   const handleSubmit = async () => {
     if (!name || !category || !address1 || !hourlyPay) {
@@ -68,13 +67,13 @@ const ShopRegisterForm = () => {
     try {
       let uploadedImageUrl = imageUrl;
 
-      // ⭐ 이미지 선택 시 → 팀원의 uploadImage(file) 사용
+      // 이미지 선택 시
       if (file) {
         uploadedImageUrl = await uploadImage(file);
         setImageUrl(uploadedImageUrl);
       }
 
-      // ⭐ 가게 등록 API 호출
+      // 가게 등록 API 호출
       await registerShop({
         name,
         category,
@@ -82,7 +81,7 @@ const ShopRegisterForm = () => {
         address2: address2 || "",
         description: description || "",
         originalHourlyPay: Number(hourlyPay),
-        imageUrl: uploadedImageUrl, // ⭐ 최종 S3 URL 저장
+        imageUrl: uploadedImageUrl, 
       });
 
       setIsModalOpen(true);
