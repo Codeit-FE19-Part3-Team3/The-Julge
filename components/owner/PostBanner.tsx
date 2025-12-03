@@ -114,7 +114,7 @@ const PostBanner = ({
             variant="secondary"
             onClick={() =>
               router.push(
-                `/owner/notices?shopId=${shopId}&noticeId=${noticeId}}`
+                `/owner/notices?shopId=${shopId}&noticeId=${noticeId}`
               )
             }>
             공고 편집하기
