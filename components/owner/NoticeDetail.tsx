@@ -188,6 +188,7 @@ const NoticeDetail = () => {
               <div className="mb-8">
                 <PostBanner
                   shopId={shop.id}
+                  noticeId={notice.id}
                   name={shop.name}
                   location={shop.address1}
                   imageUrl={shop.imageUrl}

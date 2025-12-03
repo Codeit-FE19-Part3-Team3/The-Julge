@@ -28,6 +28,7 @@ import 'tippy.js/dist/tippy.css';
 
 interface PostBannerProps {
   shopId: string;
+  noticeId: string;
   name: string;
   startAt: string;
   workTime: number;
@@ -40,6 +41,7 @@ interface PostBannerProps {
 
 const PostBanner = ({
   shopId,
+  noticeId,
   name,
   startAt,
   workTime,
@@ -110,7 +112,11 @@ const PostBanner = ({
         <div className="flex h-[48px] w-full max-[744px]:mt-[40px] max-[744px]:h-[48px] max-[375px]:mt-[24px] max-[375px]:h-[38px]">
           <Button
             variant="secondary"
-            onClick={() => router.push(`/owner/shops/manage?shopId=${shopId}`)}>
+            onClick={() =>
+              router.push(
+                `/owner/notices?shopId=${shopId}&noticeId=${noticeId}}`
+              )
+            }>
             공고 편집하기
           </Button>
         </div>
