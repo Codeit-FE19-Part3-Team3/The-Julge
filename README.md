@@ -166,12 +166,6 @@ yarn dev
 
 ## 📚 API 문서
 
-### Base URL
-
-```
-https://bootcamp-api.codeit.kr/api/19-3/the-julge
-```
-
 ### 주요 엔드포인트
 
 #### 인증
@@ -197,16 +191,11 @@ https://bootcamp-api.codeit.kr/api/19-3/the-julge
 - `POST /shops/:shopId/notices/:noticeId/applications` - 지원하기
 - `PUT /shops/:shopId/notices/:noticeId/applications/:applicationId` - 지원 상태 변경
 
-### 자세한 API 문서
-
-- [Swagger 문서](https://bootcamp-api.codeit.kr/docs/the-julge)
-- [Notion API 명세](https://www.notion.so/API-10a715ce7c2240fd9d16aa47b5a6bc34)
-
 ## 👥 팀원 소개
 
-| <img src="https://github.com/Jihyun0522.png" alt="Jihyun0522" width="100"> | <img src="https://github.com/Augustineku.png" alt="Augustineku" width="100"> | <img src="https://github.com/eunji0124.png" alt="eunji0124" width="100"> | <img src="https://github.com/le2yunji.png" alt="le2yunji" width="100"> | <img src="https://github.com/taewoo26.png" alt="taewoo26" width="100"> |
-| -------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| [강지현](https://github.com/Jihyun0522)                                    | [구영철](https://github.com/Augustineku)                                     | [양은지](https://github.com/eunji0124)                                   | [이윤지](https://github.com/le2yunji)                                  | [황태우](https://github.com/taewoo26)                                  |
+| <img src="https://github.com/Jihyun0522.png" alt="Jihyun0522" width="100"> | <img src="https://github.com/eunji0124.png" alt="eunji0124" width="100"> | <img src="https://github.com/le2yunji.png" alt="le2yunji" width="100"> | <img src="https://github.com/taewoo26.png" alt="taewoo26" width="100"> |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| [강지현](https://github.com/Jihyun0522)                                    | [양은지](https://github.com/eunji0124)                                   | [이윤지](https://github.com/le2yunji)                                  | [황태우](https://github.com/taewoo26)                                  |
 
 ## 📝 라이선스
 
